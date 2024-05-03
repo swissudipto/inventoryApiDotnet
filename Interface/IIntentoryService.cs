@@ -10,7 +10,7 @@ namespace inventoryApiDotnet.Interface
     public interface IIntentoryService
     {
         Task<Purchase> savePurchase(Purchase obj);
-        Task<IActionResult> getallpurchase(Purchase obj);
+        Task<IEnumerable<Purchase>> getallpurchase();
         Task<IActionResult> getallproducts(Purchase obj);
         Task<IActionResult> getallStock(Purchase obj);
         Task<IActionResult> getallsell(Purchase obj);

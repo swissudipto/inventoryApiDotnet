@@ -5,19 +5,27 @@ using System.Threading.Tasks;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
 using Microsoft.AspNetCore.Mvc;
+using MongoExample.Services;
 
 namespace inventoryApiDotnet.Services
 {
     public class InventoryService : IIntentoryService
     {
+        public readonly MongoDBService _mongoDBService;
+
+        public InventoryService(MongoDBService mongoDBService)
+        {
+            _mongoDBService = mongoDBService;
+        }
+
         public async Task<IActionResult> getallproducts(Purchase obj)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IActionResult> getallpurchase(Purchase obj)
+        public async Task<IEnumerable<Purchase>> getallpurchase()
         {
-            throw new NotImplementedException();
+            return await _mongoDBService.GetPurchasesAsync();
         }
 
         public async Task<IActionResult> getallsell(Purchase obj)
@@ -32,6 +40,7 @@ namespace inventoryApiDotnet.Services
 
         public async Task<Purchase> savePurchase(Purchase obj)
         {
+            await _mongoDBService.CreateNewPurchase(obj);
             return obj;
         }
     }

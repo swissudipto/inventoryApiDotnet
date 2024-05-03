@@ -1,12 +1,18 @@
 using inventoryApiDotnet.Interface;
+using inventoryApiDotnet.Model;
 using inventoryApiDotnet.Services;
+using MongoExample.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 builder.Services.AddSingleton<IIntentoryService, InventoryService>();
+builder.Services.AddSingleton<MongoDBService>();
+builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
