@@ -17,7 +17,7 @@ namespace inventoryApiDotnet.Controllers
         {
             _inventoryService = intentoryService;
         }
-
+       
         [HttpPost("savepurchase")]
         public async Task<IActionResult> savePurchase(Purchase obj)
         {

@@ -1,7 +1,12 @@
+using inventoryApiDotnet.Context;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
 using inventoryApiDotnet.Services;
-using MongoExample.Services;
+using inventoryApiDotnet.Repository;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.IdGenerators;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<IIntentoryService, InventoryService>();
-builder.Services.AddSingleton<MongoDBService>();
+builder.Services.AddScoped<IIntentoryService, InventoryService>();
+builder.Services.AddScoped<IMongoContext, MongoContext>();
+builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+builder.Services.AddScoped<MongoDBService>();
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -25,6 +32,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//BsonSerializer.RegisterIdGenerator(typeof(ObjectId), new StringObjectIdGenerator());
+BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
+BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
 
 app.UseHttpsRedirection();
 

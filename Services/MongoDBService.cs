@@ -3,7 +3,7 @@ using MongoDB.Driver;
 using MongoDB.Bson;
 using inventoryApiDotnet.Model;
 
-namespace MongoExample.Services;
+namespace inventoryApiDotnet.Services;
 
 public class MongoDBService
 {

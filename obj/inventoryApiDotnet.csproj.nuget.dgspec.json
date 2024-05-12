@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {}
+    "d:\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {}
   },
   "projects": {
-    "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {
+    "d:\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
+        "projectUniqueName": "d:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
         "projectName": "inventoryApiDotnet",
-        "projectPath": "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
+        "projectPath": "d:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
         "packagesPath": "C:\\Users\\Sudipto\\.nuget\\packages\\",
-        "outputPath": "D:\\inventoryApiDotnet\\obj\\",
+        "outputPath": "d:\\inventoryApiDotnet\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Sudipto\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -43,6 +43,10 @@
             "MongoDB.Driver": {
               "target": "Package",
               "version": "[2.25.0, )"
+            },
+            "ServiceStack": {
+              "target": "Package",
+              "version": "[8.2.2, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
