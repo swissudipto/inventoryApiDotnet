@@ -10,8 +10,8 @@ namespace inventoryApiDotnet.Model
 {
   public class Purchase
     {
-       //[BsonId]
-       public Guid Id { get; set;}
+       [BsonRepresentation(BsonType.ObjectId)] 
+       public string Id { get; set;}
        public long PurchaseId {get;set;}
        public DateTime PurchaseDate {get;set;} 
        public long ProductId {get;set;}

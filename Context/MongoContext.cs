@@ -60,13 +60,7 @@ namespace inventoryApiDotnet.Context
         public IMongoCollection<T> GetCollection<T>(string name)
         {
             ConfigureMongo();  
-            var collectionName = name;
-            if(name == nameof(Purchase))
-            {   
-                collectionName = _mongoDBsettings.Value.CollectionName;
-            }
-
-            return Database.GetCollection<T>(collectionName);
+            return Database.GetCollection<T>(name);
         }
 
         public void Dispose()

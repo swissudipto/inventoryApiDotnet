@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "i83oZk7G5t/wcXSTPxQJjp4QQwaZUrGfbI1zH2bKhC0uojw08uWPwLC/CfFOxlOA18Z//y/L1vpTOQ+0sexd0A==",
+  "dgSpecHash": "w39SBO5DsBjcca5M1r4bXofYtk4kCFfXAvzgrtnDaoCbCDZFyYrW4LbEPCtTmyL2cbDc3HUjys2xr0MCF9LwRQ==",
   "success": true,
-  "projectFilePath": "d:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
+  "projectFilePath": "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Sudipto\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\Sudipto\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",

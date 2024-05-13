@@ -21,15 +21,15 @@ namespace inventoryApiDotnet.Controllers
         [HttpPost("savepurchase")]
         public async Task<IActionResult> savePurchase(Purchase obj)
         {
-            var data = await _inventoryService.savePurchase(obj);
+            await _inventoryService.savePurchase(obj);
             return Ok();
         }
 
         [HttpGet("getallpurchase")]
         public async Task<ActionResult<List<Purchase>>> getallpurchase()
         {
-            var data = await _inventoryService.getallpurchase();
-            return Ok(data);
+            var result = await _inventoryService.getallpurchase();
+            return Ok(result);
         }
 
         [HttpGet("getallproducts")]

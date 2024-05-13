@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {}
+    "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {}
   },
   "projects": {
-    "d:\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {
+    "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
+        "projectUniqueName": "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
         "projectName": "inventoryApiDotnet",
-        "projectPath": "d:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
+        "projectPath": "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
         "packagesPath": "C:\\Users\\Sudipto\\.nuget\\packages\\",
-        "outputPath": "d:\\inventoryApiDotnet\\obj\\",
+        "outputPath": "D:\\inventoryApiDotnet\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Sudipto\\AppData\\Roaming\\NuGet\\NuGet.Config",

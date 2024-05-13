@@ -4,6 +4,7 @@ using ServiceStack;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace inventoryApiDotnet.Repository
 {
@@ -19,9 +20,9 @@ namespace inventoryApiDotnet.Repository
             DbSet = Context.GetCollection<TEntity>(typeof(TEntity).Name);
         }
 
-        public virtual void  Add(TEntity obj)
+        public virtual async Task Add(TEntity obj)
         {
-                 DbSet.InsertOne(obj);
+            await DbSet.InsertOneAsync(obj);
         }
 
         public virtual async Task<TEntity> GetById(Guid id)
@@ -31,9 +32,8 @@ namespace inventoryApiDotnet.Repository
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAll()
-        {
-            var all = await DbSet.FindAsync(Builders<TEntity>.Filter.Empty);
-            return all.ToList();
+        { 
+           return await DbSet.Find(new BsonDocument()).ToListAsync();
         }
 
         public virtual void Update(TEntity obj)

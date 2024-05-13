@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
 using Microsoft.AspNetCore.Mvc;
-using inventoryApiDotnet.Services;
+using MongoDB.Bson;
 
 namespace inventoryApiDotnet.Services
 {
@@ -40,11 +36,10 @@ namespace inventoryApiDotnet.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Purchase> savePurchase(Purchase obj)
+        public async Task savePurchase(Purchase obj)
         {
-            obj.Id = new Guid();
-            _purchaseRepository.Add(obj);
-            return obj;
+            obj.Id = ObjectId.GenerateNewId().ToString();
+            await _purchaseRepository.Add(obj);
         }
     }
 }
