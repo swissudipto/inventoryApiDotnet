@@ -7,12 +7,18 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Serializers;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+                .AddJsonOptions(options=> {
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    
+                });
 
 builder.Services.AddScoped<IIntentoryService, InventoryService>();
 builder.Services.AddScoped<IMongoContext, MongoContext>();
@@ -36,6 +42,10 @@ if (app.Environment.IsDevelopment())
 //BsonSerializer.RegisterIdGenerator(typeof(ObjectId), new StringObjectIdGenerator());
 BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+
+app.UseCors(
+  options => options.WithOrigins("*").AllowAnyMethod().AllowAnyHeader()
+      );
 
 app.UseHttpsRedirection();
 

@@ -11,5 +11,6 @@ namespace inventoryApiDotnet.Interface
         Task<IEnumerable<TEntity>> GetAll();
         void Update(TEntity obj);
         void Remove(Guid id);
+        long GetCollectionCount();
     }
 }

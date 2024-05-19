@@ -38,7 +38,9 @@ namespace inventoryApiDotnet.Services
 
         public async Task savePurchase(Purchase obj)
         {
+            Random rand = new Random();
             obj.Id = ObjectId.GenerateNewId().ToString();
+            obj.InvoiceNo = string.Concat ("PR" + rand.Next(0000,9999) +(_purchaseRepository.GetCollectionCount()+1));
             await _purchaseRepository.Add(obj);
         }
     }

@@ -50,5 +50,9 @@ namespace inventoryApiDotnet.Repository
         {
             Context?.Dispose();
         }
+        public long GetCollectionCount()
+        {
+            return  DbSet.CountDocuments(Builders<TEntity>.Filter.Empty);
+        }
     }
 }
