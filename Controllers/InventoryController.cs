@@ -35,15 +35,13 @@ namespace inventoryApiDotnet.Controllers
         [HttpGet("getallStock")]
         public async Task<IActionResult> getallStock(Purchase obj)
         {
-            Console.WriteLine("Purchase Saved Successfullly");
-            return Ok("Purchase Saved Successfullly");
+            throw new NotFiniteNumberException();
         }
 
         [HttpGet("getallsell")]
         public async Task<IActionResult> getallsell(Purchase obj)
         {
-            Console.WriteLine("Purchase Saved Successfullly");
-            return Ok("Purchase Saved Successfullly");
+            throw new NotFiniteNumberException();
         }
     }
 }
