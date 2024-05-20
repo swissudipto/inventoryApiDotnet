@@ -4,26 +4,20 @@ using inventoryApiDotnet.Model;
 using inventoryApiDotnet.Services;
 using inventoryApiDotnet.Repository;
 using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Serializers;
-using Microsoft.Extensions.Options;
-using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllers()
-                .AddJsonOptions(options=> {
-                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-                    
-                });
+builder.Services.AddControllers();               
 
 builder.Services.AddScoped<IIntentoryService, InventoryService>();
 builder.Services.AddScoped<IMongoContext, MongoContext>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 builder.Services.AddScoped<MongoDBService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

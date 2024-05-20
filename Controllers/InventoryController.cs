@@ -32,13 +32,6 @@ namespace inventoryApiDotnet.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getallproducts")]
-        public async Task<IActionResult> getallproducts(Purchase obj)
-        {
-            Console.WriteLine("Purchase Saved Successfullly");
-            return Ok("Purchase Saved Successfullly");
-        }
-
         [HttpGet("getallStock")]
         public async Task<IActionResult> getallStock(Purchase obj)
         {
