@@ -9,7 +9,7 @@ namespace inventoryApiDotnet.Interface
 {
     public interface IProductService
     {
-        Task SaveProduct(Product obj);
+        Task<Product> SaveProduct(Product obj);
         Task<IEnumerable<Product>> GetAllProducts();
     }
 }
