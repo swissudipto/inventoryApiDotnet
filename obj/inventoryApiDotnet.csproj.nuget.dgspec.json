@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Matrix\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {}
+    "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {}
   },
   "projects": {
-    "C:\\Matrix\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {
+    "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Matrix\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
+        "projectUniqueName": "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
         "projectName": "inventoryApiDotnet",
-        "projectPath": "C:\\Matrix\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
-        "packagesPath": "C:\\Users\\boses\\.nuget\\packages\\",
-        "outputPath": "C:\\Matrix\\inventoryApiDotnet\\obj\\",
+        "projectPath": "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
+        "packagesPath": "C:\\Users\\Sudipto\\.nuget\\packages\\",
+        "outputPath": "D:\\inventoryApiDotnet\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\boses\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Sudipto\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -72,7 +72,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.404\\RuntimeIdentifierGraph.json"
         }
       }
     }
