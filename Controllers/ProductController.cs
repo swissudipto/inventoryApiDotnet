@@ -26,10 +26,10 @@ namespace inventoryApiDotnet.Controllers
         } 
 
         [HttpPost("saveProduct")]
-        public async Task<IActionResult> saveProduct(Product obj)
+        public async Task<ActionResult<Product>> saveProduct(Product obj)
         {
-            await _productService.SaveProduct(obj);
-            return Ok();
+            var result = await _productService.SaveProduct(obj);
+            return Ok(result);
         }
     
     }

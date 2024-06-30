@@ -21,11 +21,12 @@ namespace inventoryApiDotnet.Services
             return await _productRepository.GetAll();;
         }
 
-        public async Task SaveProduct(Product obj)
+        public async Task<Product> SaveProduct(Product obj)
         {  
             obj.Id = ObjectId.GenerateNewId().ToString();  
             obj.ProductId = _productRepository.GetCollectionCount()+1;        
             await _productRepository.Add(obj);
+            return obj;
         }
     }
 }
