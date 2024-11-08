@@ -8,9 +8,11 @@ namespace inventoryApiDotnet.Services
     public class Stockservice : IStockservice
     {
         public readonly IStockRepository _stockRepository;
-        public Stockservice(IStockRepository stockRepository)
+        public readonly IProductService _productsrvice;
+        public Stockservice(IStockRepository stockRepository,IProductService productservice)
         {
             _stockRepository = stockRepository;
+            _productsrvice = productservice;
         }
 
         public async Task<string> AddNewStock(Purchase obj)
@@ -24,9 +26,11 @@ namespace inventoryApiDotnet.Services
             var response = await _stockRepository.QueryCollectionAsync(new Stock(), filterParameters);
             if (response.Count == 0)
             {
+                var product = await _productsrvice.GetProductById((long)obj.ProductId);
                 var newStock = new Stock
                 {
                     ProductId = obj.ProductId > 0 ? obj.ProductId : 0,
+                    ProductName = product.ProductName !=null?product.ProductName:"",
                     Quantity = obj.Quantity > 0 ? obj.Quantity : 0
                 };
                 await _stockRepository.Add(newStock);
@@ -37,6 +41,12 @@ namespace inventoryApiDotnet.Services
                 await _stockRepository.Update(existingstock);
             }
             return "success";
+        }
+
+        public async Task<List<Stock>> GetAllStock()
+        {
+            var response = await _stockRepository.GetAll();
+            return  response.ToList();
         }
     }
 }

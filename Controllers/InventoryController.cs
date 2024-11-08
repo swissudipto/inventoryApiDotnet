@@ -12,10 +12,12 @@ namespace inventoryApiDotnet.Controllers
     public class InventoryController : ControllerBase
     {
         private readonly IIntentoryService _inventoryService;
+        private readonly IStockservice _stockservice;
         
-        public InventoryController(IIntentoryService intentoryService)
+        public InventoryController(IIntentoryService intentoryService,IStockservice stockservice)
         {
             _inventoryService = intentoryService;
+            _stockservice = stockservice;
         }
        
         [HttpPost("savepurchase")]
@@ -33,9 +35,10 @@ namespace inventoryApiDotnet.Controllers
         }
 
         [HttpGet("getallStock")]
-        public async Task<IActionResult> getallStock(Purchase obj)
+        public async Task<ActionResult<Stock>> getallStock()
         {
-            throw new NotFiniteNumberException();
+            var result = await _stockservice.GetAllStock();
+            return Ok(result);
         }
 
         [HttpGet("getallsell")]

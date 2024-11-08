@@ -18,15 +18,25 @@ namespace inventoryApiDotnet.Services
 
         public async Task<IEnumerable<Product>> GetAllProducts()
         {
-            return await _productRepository.GetAll();;
+            return await _productRepository.GetAll();
         }
 
         public async Task<Product> SaveProduct(Product obj)
-        {  
-            obj.Id = ObjectId.GenerateNewId().ToString();  
-            obj.ProductId = _productRepository.GetCollectionCount()+1;        
+        {
+            obj.Id = ObjectId.GenerateNewId().ToString();
+            obj.ProductId = _productRepository.GetCollectionCount() + 1;
             await _productRepository.Add(obj);
             return obj;
+        }
+
+        public async Task<Product?> GetProductById(long productID)
+        {
+            var filterParameters = new Dictionary<string, object>()
+              {
+                {nameof(Product.ProductId),productID}
+              };
+            var response = await _productRepository.QueryCollectionAsync(new Product(), filterParameters);
+            return response != null ? response.FirstOrDefault() : null;
         }
     }
 }

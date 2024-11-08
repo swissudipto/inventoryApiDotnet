@@ -9,5 +9,6 @@ namespace inventoryApiDotnet.Interface
     public interface IStockservice
     {
         Task<string> AddNewStock(Purchase obj); 
+        Task<List<Stock>> GetAllStock();
     }
 }
