@@ -10,7 +10,6 @@ namespace inventoryApiDotnet.Model
 {
   public class Purchase
     {
-       [BsonRepresentation(BsonType.ObjectId)] 
        public string? Id { get; set;}
        public string? PurchaseId {get;set;}
        public DateTime? PurchaseDate {get;set;} 

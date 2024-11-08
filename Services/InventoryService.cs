@@ -9,11 +9,13 @@ namespace inventoryApiDotnet.Services
     {
         public readonly MongoDBService _mongoDBService;
         public readonly IPurchaseRepository _purchaseRepository;
+        public readonly IStockservice _Stockservice;
 
-        public InventoryService(MongoDBService mongoDBService, IPurchaseRepository purchaseRepository)
+        public InventoryService(MongoDBService mongoDBService, IPurchaseRepository purchaseRepository,IStockservice Stockservice)
         {
             _mongoDBService = mongoDBService;
             _purchaseRepository = purchaseRepository;
+            _Stockservice = Stockservice;
         }
 
         public async Task<IActionResult> getallproducts(Purchase obj)
@@ -42,6 +44,7 @@ namespace inventoryApiDotnet.Services
             obj.Id = ObjectId.GenerateNewId().ToString();
             obj.PurchaseId = string.Concat ("PR" + rand.Next(0000,9999) +(_purchaseRepository.GetCollectionCount()+1));
             await _purchaseRepository.Add(obj);
+            await _Stockservice.AddNewStock(obj);
         }
     }
 }

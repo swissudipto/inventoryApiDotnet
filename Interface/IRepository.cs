@@ -9,8 +9,9 @@ namespace inventoryApiDotnet.Interface
         Task Add(TEntity obj);
         Task<TEntity> GetById(Guid id);
         Task<IEnumerable<TEntity>> GetAll();
-        void Update(TEntity obj);
+        Task<bool> Update(TEntity obj);
         void Remove(Guid id);
         long GetCollectionCount();
+        Task<List<TEntity>> QueryCollectionAsync(TEntity obj,Dictionary<string, object> filterParameters);
     }
 }

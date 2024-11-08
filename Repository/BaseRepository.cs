@@ -36,14 +36,34 @@ namespace inventoryApiDotnet.Repository
            return await DbSet.Find(new BsonDocument()).ToListAsync();
         }
 
-        public virtual void Update(TEntity obj)
+        public virtual async Task<bool> Update(TEntity obj)
         {
-            Context.AddCommand(() => DbSet.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", obj.GetId()), obj));
+            var result = await DbSet.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", obj.GetId()), obj);
+            return result.IsAcknowledged ? result.IsAcknowledged : false;
         }
 
         public virtual void Remove(Guid id)
         {
             Context.AddCommand(() => DbSet.DeleteOneAsync(Builders<TEntity>.Filter.Eq("_id", id)));
+        }
+
+        public async Task<List<TEntity>> QueryCollectionAsync(TEntity obj,
+                                                              Dictionary<string, object> filterParameters)
+        {
+            // Build the filter
+            var filterBuilder = Builders<TEntity>.Filter;
+            var filter = FilterDefinition<TEntity>.Empty;
+
+            foreach (var parameter in filterParameters)
+            {
+                // Add each filter parameter to the filter
+                filter &= filterBuilder.Eq(parameter.Key, BsonValue.Create(parameter.Value));
+            }
+
+            // Query the collection with the constructed filter
+            var results = await DbSet.Find(filter).ToListAsync();
+
+            return results;
         }
 
         public void Dispose()
