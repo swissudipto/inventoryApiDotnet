@@ -9,7 +9,7 @@ namespace inventoryApiDotnet.Services
     {
         public readonly IStockRepository _stockRepository;
         public readonly IProductService _productsrvice;
-        public Stockservice(IStockRepository stockRepository,IProductService productservice)
+        public Stockservice(IStockRepository stockRepository, IProductService productservice)
         {
             _stockRepository = stockRepository;
             _productsrvice = productservice;
@@ -30,14 +30,15 @@ namespace inventoryApiDotnet.Services
                 var newStock = new Stock
                 {
                     ProductId = obj.ProductId > 0 ? obj.ProductId : 0,
-                    ProductName = product.ProductName !=null?product.ProductName:"",
+                    ProductName = product.ProductName != null ? product.ProductName : "",
                     Quantity = obj.Quantity > 0 ? obj.Quantity : 0
                 };
                 await _stockRepository.Add(newStock);
             }
-            else{
+            else
+            {
                 var existingstock = response.FirstOrDefault();
-                existingstock.Quantity +=obj.Quantity; 
+                existingstock.Quantity += obj.Quantity;
                 await _stockRepository.Update(existingstock);
             }
             return "success";
@@ -46,7 +47,7 @@ namespace inventoryApiDotnet.Services
         public async Task<List<Stock>> GetAllStock()
         {
             var response = await _stockRepository.GetAll();
-            return  response.ToList();
+            return response.OrderByDescending(x=>x.Quantity).ToList();
         }
     }
 }

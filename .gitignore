@@ -14,3 +14,5 @@ obj/inventoryApiDotnet.csproj.nuget.dgspec.json
 bin/Debug/net6.0/inventoryApiDotnet.dll
 bin/Debug/net6.0/inventoryApiDotnet.exe
 bin/Debug/net6.0/inventoryApiDotnet.pdb
+bin/
+obj/

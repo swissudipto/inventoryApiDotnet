@@ -30,7 +30,8 @@ namespace inventoryApiDotnet.Services
 
         public async Task<IEnumerable<Purchase>> getallpurchase()
         {
-            return await _purchaseRepository.GetAll();
+            var allPurchaseList =  await _purchaseRepository.GetAll();
+            return  allPurchaseList.OrderByDescending(x=>x.transactionDateTime).ToList();
         }
 
         public async Task<IActionResult> getallsell(Purchase obj)

@@ -89,9 +89,15 @@ D:\inventoryApiDotnet\obj\Debug\net6.0\inventoryApiDotnet.MvcApplicationPartsAss
 D:\inventoryApiDotnet\obj\Debug\net6.0\staticwebassets.build.json
 D:\inventoryApiDotnet\obj\Debug\net6.0\staticwebassets.development.json
 D:\inventoryApiDotnet\obj\Debug\net6.0\scopedcss\bundle\inventoryApiDotnet.styles.css
-D:\inventoryApiDotnet\obj\Debug\net6.0\inventoryApiDotnet.csproj.CopyComplete
 D:\inventoryApiDotnet\obj\Debug\net6.0\inventoryApiDotnet.dll
 D:\inventoryApiDotnet\obj\Debug\net6.0\refint\inventoryApiDotnet.dll
 D:\inventoryApiDotnet\obj\Debug\net6.0\inventoryApiDotnet.pdb
 D:\inventoryApiDotnet\obj\Debug\net6.0\inventoryApiDotnet.genruntimeconfig.cache
 D:\inventoryApiDotnet\obj\Debug\net6.0\ref\inventoryApiDotnet.dll
+D:\inventoryApiDotnet\obj\Debug\net6.0\inventoryApiDotnet.sourcelink.json
+D:\inventoryApiDotnet\obj\Debug\net6.0\staticwebassets\msbuild.inventoryApiDotnet.Microsoft.AspNetCore.StaticWebAssets.props
+D:\inventoryApiDotnet\obj\Debug\net6.0\staticwebassets\msbuild.build.inventoryApiDotnet.props
+D:\inventoryApiDotnet\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.inventoryApiDotnet.props
+D:\inventoryApiDotnet\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.inventoryApiDotnet.props
+D:\inventoryApiDotnet\obj\Debug\net6.0\staticwebassets.pack.json
+D:\inventoryApiDotnet\obj\Debug\net6.0\inventor.5F7EBD93.Up2Date
