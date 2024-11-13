@@ -10,5 +10,7 @@ namespace inventoryApiDotnet.Interface
     {
         Task<string> AddNewStock(Purchase obj); 
         Task<List<Stock>> GetAllStock();
+        Boolean checkIfProductInStock(Sell sell, out string meassage);
+        Task afterSellStockModification(Sell sell);
     }
 }

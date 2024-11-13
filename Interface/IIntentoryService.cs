@@ -13,6 +13,7 @@ namespace inventoryApiDotnet.Interface
         Task<IEnumerable<Purchase>> getallpurchase();
         Task<IActionResult> getallproducts(Purchase obj);
         Task<IActionResult> getallStock(Purchase obj);
-        Task<IActionResult> getallsell(Purchase obj);
+        Task<IEnumerable<Sell>> getallsell();
+        Task<string> saveNewSell(Sell sell);
     }
 }

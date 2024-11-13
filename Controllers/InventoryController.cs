@@ -42,9 +42,21 @@ namespace inventoryApiDotnet.Controllers
         }
 
         [HttpGet("getallsell")]
-        public async Task<IActionResult> getallsell(Purchase obj)
+        public async Task<IActionResult> getallsell()
         {
-            throw new NotFiniteNumberException();
+            var result = await _inventoryService.getallsell();
+            return Ok(result);
+        }
+
+        [HttpPost("savesell")]
+        public async Task<IActionResult> savesell(Sell obj)
+        {
+            var response = await _inventoryService.saveNewSell(obj);
+            if(response != "Success")
+            {
+                return BadRequest(response);
+            }
+            return Ok();
         }
     }
 }
