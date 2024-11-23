@@ -12,18 +12,21 @@ namespace inventoryApiDotnet.Services
         public readonly IStockservice _Stockservice;
         public readonly IProductService _productservice;
         public readonly ISellRepository _sellRepository;
+        public readonly IInvoiceCounterService _invoiceCounterService;
 
         public InventoryService(MongoDBService mongoDBService,
                                 IPurchaseRepository purchaseRepository,
                                 IStockservice Stockservice,
                                 IProductService productService,
-                                ISellRepository sellRepository)
+                                ISellRepository sellRepository,
+                                IInvoiceCounterService invoiceCounterService)
         {
             _mongoDBService = mongoDBService;
             _purchaseRepository = purchaseRepository;
             _Stockservice = Stockservice;
             _productservice = productService;
             _sellRepository = sellRepository;
+            _invoiceCounterService = invoiceCounterService;
         }
 
         public async Task<IActionResult> getallproducts(Purchase obj)
@@ -50,8 +53,6 @@ namespace inventoryApiDotnet.Services
 
         public async Task savePurchase(Purchase obj)
         {
-            Random rand = new Random();
-            obj.PurchaseId = string.Concat("PR" + rand.Next(0000, 9999) + (_purchaseRepository.GetCollectionCount() + 1));
             var product = await _productservice.GetProductById((long)obj.ProductId);
             obj.ProductName = product.ProductName;
             obj.transactionDateTime = DateTime.Now;
@@ -60,14 +61,14 @@ namespace inventoryApiDotnet.Services
         }
         
         public async Task<string> saveNewSell(Sell sell)
-        {
+        { 
             string message;
             var response = _Stockservice.checkIfProductInStock(sell, out message);
             if (!response)
             {
                 return message;
             }
-            sell.InvoiceNo = "010101010"; // Create a Invoice e Generation Logic 
+            sell.InvoiceNo = await _invoiceCounterService.GenerateInvoiceNumber();
             sell.transactionDateTime = DateTime.Now;
             await _sellRepository.Add(sell);
             await _Stockservice.afterSellStockModification(sell);

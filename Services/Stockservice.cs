@@ -1,7 +1,6 @@
+using inventoryApiDotnet.Constants;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
-using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 
 namespace inventoryApiDotnet.Services
 {
@@ -9,7 +8,8 @@ namespace inventoryApiDotnet.Services
     {
         public readonly IStockRepository _stockRepository;
         public readonly IProductService _productsrvice;
-        public Stockservice(IStockRepository stockRepository, IProductService productservice)
+        public Stockservice(IStockRepository stockRepository,
+                            IProductService productservice)
         {
             _stockRepository = stockRepository;
             _productsrvice = productservice;
@@ -23,7 +23,8 @@ namespace inventoryApiDotnet.Services
                 {nameof(Stock.ProductId),obj.ProductId}
               };
 
-            var response = await _stockRepository.QueryCollectionAsync(new Stock(), filterParameters);
+            var response = await _stockRepository
+                          .QueryCollectionAsync(new Stock(), filterParameters);
             if (response.Count == 0)
             {
                 var product = await _productsrvice.GetProductById((long)obj.ProductId);
@@ -50,21 +51,25 @@ namespace inventoryApiDotnet.Services
             return response.OrderByDescending(x => x.Quantity).ToList();
         }
 
-        public Boolean checkIfProductInStock(Sell sell, out string message)
+        public Boolean checkIfProductInStock(Sell sell, out string message)  // Need To test this Method
         {
             var filterParameters = new Dictionary<string, object>()
               {
                 {nameof(sell.ProductId),sell.ProductId}
               };
 
-            var response = _stockRepository.QueryCollectionAsync(new Stock(), filterParameters);
+            var response = _stockRepository
+                          .QueryCollectionAsync(new Stock(), filterParameters);
 
             if (response?.Result?.FirstOrDefault()?.Quantity.Value < sell.Quantity)
             {
-                message = "Not Enough Stock. Available Quantity of " + sell.ProductName + " : " + response.Result?.FirstOrDefault().Quantity.Value;
+                message = InventoryConstants.OutofStockErrorMessage 
+                          + sell.ProductName 
+                          + " : " 
+                          + response.Result?.FirstOrDefault().Quantity.Value;
                 return false;
             }
-            message = "Success";
+            message = InventoryConstants.SuccessMessage;
             return true;
         }
 
@@ -75,7 +80,9 @@ namespace inventoryApiDotnet.Services
                 {nameof(Stock.ProductId),sell.ProductId}
               };
 
-            var response = await _stockRepository.QueryCollectionAsync(new Stock(), filterParameters);
+            var response = await _stockRepository
+                            .QueryCollectionAsync(new Stock(),filterParameters);
+
             var ProductStock = response.FirstOrDefault();
             ProductStock.Quantity -= sell.Quantity;
             await _stockRepository.Update(ProductStock);
