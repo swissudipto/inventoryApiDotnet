@@ -17,16 +17,25 @@ namespace inventoryApiDotnet.Controllers
         {
             _productService = productService;
         }
-   
+
+        /// <summary>
+        ///  Gets all the existing Products from DB
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("getallProducts")]
-        public async Task<ActionResult<List<Product>>> getallProducts()
+        public async Task<ActionResult<List<Product>>> GetAllProducts()
         {
             var result = await _productService.GetAllProducts();
             return Ok(result);
         } 
 
+        /// <summary>
+        /// Saves a new Product in the DB
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         [HttpPost("saveProduct")]
-        public async Task<ActionResult<Product>> saveProduct(Product obj)
+        public async Task<ActionResult<Product>> SaveProduct(Product obj)
         {
             var result = await _productService.SaveProduct(obj);
             return Ok(result);

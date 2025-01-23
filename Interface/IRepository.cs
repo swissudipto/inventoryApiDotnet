@@ -13,5 +13,6 @@ namespace inventoryApiDotnet.Interface
         void Remove(Guid id);
         long GetCollectionCount();
         Task<List<TEntity>> QueryCollectionAsync(TEntity obj,Dictionary<string, object> filterParameters);
+        Task<IEnumerable<TEntity>> GetAllbyPage(int page, int pageSize);
     }
 }

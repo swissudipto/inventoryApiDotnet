@@ -11,9 +11,11 @@ namespace inventoryApiDotnet.Interface
     {
         Task savePurchase(Purchase obj);
         Task<IEnumerable<Purchase>> getallpurchase();
+        Task<IEnumerable<Purchase>> getallpurchase(int page, int pageSize);
         Task<IActionResult> getallproducts(Purchase obj);
         Task<IActionResult> getallStock(Purchase obj);
         Task<IEnumerable<Sell>> getallsell();
+        Task<IEnumerable<Sell>> getallsell(int page, int pageSize);
         Task<string> saveNewSell(Sell sell);
     }
 }

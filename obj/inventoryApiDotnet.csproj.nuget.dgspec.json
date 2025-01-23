@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {}
+    "C:\\Matrix\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {}
   },
   "projects": {
-    "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {
+    "C:\\Matrix\\inventoryApiDotnet\\inventoryApiDotnet.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
+        "projectUniqueName": "C:\\Matrix\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
         "projectName": "inventoryApiDotnet",
-        "projectPath": "D:\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
+        "projectPath": "C:\\Matrix\\inventoryApiDotnet\\inventoryApiDotnet.csproj",
         "packagesPath": "C:\\Users\\boses\\.nuget\\packages\\",
-        "outputPath": "D:\\inventoryApiDotnet\\obj\\",
+        "outputPath": "C:\\Matrix\\inventoryApiDotnet\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\boses\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\boses\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -32,11 +34,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -67,24 +64,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.33, 6.0.33]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[6.0.33, 6.0.33]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.33, 6.0.33]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.33, 6.0.33]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -93,7 +72,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }

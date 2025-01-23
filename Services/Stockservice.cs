@@ -51,6 +51,12 @@ namespace inventoryApiDotnet.Services
             return response.OrderByDescending(x => x.Quantity).ToList();
         }
 
+        public async Task<List<Stock>> GetAllStock(int page, int pageSize)
+        {
+            var response = await _stockRepository.GetAllbyPage(page,pageSize);
+            return response.OrderByDescending(x => x.Quantity).ToList();
+        }
+
         public Boolean checkIfProductInStock(Sell sell, out string message)  // Need To test this Method
         {
             var filterParameters = new Dictionary<string, object>()

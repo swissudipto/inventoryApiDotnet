@@ -3,6 +3,7 @@ namespace inventoryApiDotnet.Model
   public class Purchase
   {
     public string? Id { get; set; }
+    public string? PurchaseId { get; set; }
     public DateTime? PurchaseDate { get; set; }
     public long? ProductId { get; set; }
     public string? ProductName { get; set; }

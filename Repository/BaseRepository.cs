@@ -66,6 +66,16 @@ namespace inventoryApiDotnet.Repository
             return results;
         }
 
+        public async Task<IEnumerable<TEntity>> GetAllbyPage(int page, int pageSize)
+        {
+            var skip = (page - 1) * pageSize;
+            return await DbSet
+                    .Find(x => true)
+                    .Skip(skip)
+                    .Limit(pageSize)
+                    .ToListAsync();
+        }
+
         public void Dispose()
         {
             Context?.Dispose();

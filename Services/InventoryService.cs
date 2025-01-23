@@ -40,9 +40,21 @@ namespace inventoryApiDotnet.Services
             return allPurchaseList.OrderByDescending(x => x.transactionDateTime).ToList();
         }
 
+        public async Task<IEnumerable<Purchase>> getallpurchase(int page, int pageSize)
+        {
+            var allPurchaseList = await _purchaseRepository.GetAllbyPage(page,pageSize);
+            return allPurchaseList.OrderByDescending(x => x.transactionDateTime).ToList();
+        }
+
         public async Task<IEnumerable<Sell>> getallsell()
         {
             var allSellList = await _sellRepository.GetAll();
+            return allSellList.OrderByDescending(x => x.transactionDateTime).ToList();
+        }
+
+        public async Task<IEnumerable<Sell>> getallsell(int page, int pageSize)
+        {
+            var allSellList = await _sellRepository.GetAllbyPage(page,pageSize);
             return allSellList.OrderByDescending(x => x.transactionDateTime).ToList();
         }
 
