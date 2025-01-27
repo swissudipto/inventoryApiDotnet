@@ -80,9 +80,9 @@ namespace inventoryApiDotnet.Repository
         {
             Context?.Dispose();
         }
-        public long GetCollectionCount()
+        public async Task<long> GetCollectionCount()
         {
-            return  DbSet.CountDocuments(Builders<TEntity>.Filter.Empty);
+            return  await DbSet.CountDocumentsAsync(Builders<TEntity>.Filter.Empty);
         }
     }
 }

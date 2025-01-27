@@ -43,6 +43,7 @@ namespace inventoryApiDotnet.Services
         public async Task<IEnumerable<Purchase>> getallpurchase(int page, int pageSize)
         {
             var allPurchaseList = await _purchaseRepository.GetAllbyPage(page,pageSize);
+            var totalRecords = await _purchaseRepository.GetCollectionCount();
             return allPurchaseList.OrderByDescending(x => x.transactionDateTime).ToList();
         }
 
@@ -86,5 +87,6 @@ namespace inventoryApiDotnet.Services
             await _Stockservice.afterSellStockModification(sell);
             return message;
         }
+
     }
 }
