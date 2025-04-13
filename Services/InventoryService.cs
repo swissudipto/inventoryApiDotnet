@@ -40,11 +40,12 @@ namespace inventoryApiDotnet.Services
             return allPurchaseList.OrderByDescending(x => x.transactionDateTime).ToList();
         }
 
-        public async Task<IEnumerable<Purchase>> getallpurchase(int page, int pageSize)
+        public async Task<PagedResult<Purchase>> getallpurchase(int page, int pageSize)
         {
             var allPurchaseList = await _purchaseRepository.GetAllbyPage(page,pageSize);
             var totalRecords = await _purchaseRepository.GetCollectionCount();
-            return allPurchaseList.OrderByDescending(x => x.transactionDateTime).ToList();
+
+            return new PagedResult<Purchase>(allPurchaseList.ToList(),totalRecords,page,pageSize);
         }
 
         public async Task<IEnumerable<Sell>> getallsell()

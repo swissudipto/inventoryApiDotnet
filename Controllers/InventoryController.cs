@@ -47,7 +47,7 @@ namespace inventoryApiDotnet.Controllers
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet("getallpurchase")]
-        public async Task<ActionResult<List<Purchase>>> GetAllpurchase([FromQuery]int page = 1, [FromQuery]int pageSize = 100)
+        public async Task<IActionResult> GetAllpurchase([FromQuery]int page = 1, [FromQuery]int pageSize = 100)
         {
             if (page < 1 || pageSize < 1)
             {

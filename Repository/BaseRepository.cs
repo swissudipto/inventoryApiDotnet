@@ -68,9 +68,11 @@ namespace inventoryApiDotnet.Repository
 
         public async Task<IEnumerable<TEntity>> GetAllbyPage(int page, int pageSize)
         {
+            var sort = Builders<TEntity>.Sort.Descending("transactionDateTime");
             var skip = (page - 1) * pageSize;
             return await DbSet
                     .Find(x => true)
+                    .Sort(sort)
                     .Skip(skip)
                     .Limit(pageSize)
                     .ToListAsync();
