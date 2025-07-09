@@ -4,94 +4,94 @@ using inventoryApiDotnet.Model;
 
 namespace inventoryApiDotnet.Services
 {
-    public class Stockservice : IStockservice
+  public class Stockservice : IStockservice
+  {
+    public readonly IStockRepository _stockRepository;
+    public readonly IProductService _productsrvice;
+    public Stockservice(IStockRepository stockRepository,
+                        IProductService productservice)
     {
-        public readonly IStockRepository _stockRepository;
-        public readonly IProductService _productsrvice;
-        public Stockservice(IStockRepository stockRepository,
-                            IProductService productservice)
-        {
-            _stockRepository = stockRepository;
-            _productsrvice = productservice;
-        }
+      _stockRepository = stockRepository;
+      _productsrvice = productservice;
+    }
 
-        public async Task<string> AddNewStock(Purchase obj)
-        {
+    public async Task<string> AddNewStock(PurchaseItem obj)
+    {
 
-            var filterParameters = new Dictionary<string, object>()
+      var filterParameters = new Dictionary<string, object>()
               {
                 {nameof(Stock.ProductId),obj.ProductId}
               };
 
-            var response = await _stockRepository
-                          .QueryCollectionAsync(new Stock(), filterParameters);
-            if (response.Count == 0)
-            {
-                var product = await _productsrvice.GetProductById((long)obj.ProductId);
-                var newStock = new Stock
-                {
-                    ProductId = obj.ProductId > 0 ? obj.ProductId : 0,
-                    ProductName = product.ProductName != null ? product.ProductName : "",
-                    Quantity = obj.Quantity > 0 ? obj.Quantity : 0
-                };
-                await _stockRepository.Add(newStock);
-            }
-            else
-            {
-                var existingstock = response.FirstOrDefault();
-                existingstock.Quantity += obj.Quantity;
-                await _stockRepository.Update(existingstock);
-            }
-            return "success";
-        }
-
-        public async Task<List<Stock>> GetAllStock()
+      var response = await _stockRepository
+                    .QueryCollectionAsync(new Stock(), filterParameters);
+      if (response.Count == 0)
+      {
+        var product = await _productsrvice.GetProductById((long)obj.ProductId);
+        var newStock = new Stock
         {
-            var response = await _stockRepository.GetAll();
-            return response.OrderByDescending(x => x.Quantity).ToList();
-        }
+          ProductId = obj.ProductId > 0 ? obj.ProductId : 0,
+          ProductName = product.ProductName != null ? product.ProductName : "",
+          Quantity = obj.Quantity > 0 ? obj.Quantity : 0
+        };
+        await _stockRepository.Add(newStock);
+      }
+      else
+      {
+        var existingstock = response.FirstOrDefault();
+        existingstock.Quantity += obj.Quantity;
+        await _stockRepository.Update(existingstock);
+      }
+      return "success";
+    }
 
-        public async Task<List<Stock>> GetAllStock(int page, int pageSize)
-        {
-            var response = await _stockRepository.GetAllbyPage(page,pageSize);
-            return response.OrderByDescending(x => x.Quantity).ToList();
-        }
+    public async Task<List<Stock>> GetAllStock()
+    {
+      var response = await _stockRepository.GetAll();
+      return response.OrderByDescending(x => x.Quantity).ToList();
+    }
 
-        public Boolean checkIfProductInStock(Sell sell, out string message)  // Need To test this Method
-        {
-            var filterParameters = new Dictionary<string, object>()
+    public async Task<List<Stock>> GetAllStock(int page, int pageSize)
+    {
+      var response = await _stockRepository.GetAllbyPage(page, pageSize);
+      return response.OrderByDescending(x => x.Quantity).ToList();
+    }
+
+    public Boolean checkIfProductInStock(Sell sell, out string message)  // Need To test this Method
+    {
+      var filterParameters = new Dictionary<string, object>()
               {
                 {nameof(sell.ProductId),sell.ProductId}
               };
 
-            var response = _stockRepository
-                          .QueryCollectionAsync(new Stock(), filterParameters);
+      var response = _stockRepository
+                    .QueryCollectionAsync(new Stock(), filterParameters);
 
-            if (response?.Result?.FirstOrDefault()?.Quantity.Value < sell.Quantity)
-            {
-                message = InventoryConstants.OutofStockErrorMessage 
-                          + sell.ProductName 
-                          + " : " 
-                          + response.Result?.FirstOrDefault().Quantity.Value;
-                return false;
-            }
-            message = InventoryConstants.SuccessMessage;
-            return true;
-        }
+      if (response?.Result?.FirstOrDefault()?.Quantity.Value < sell.Quantity)
+      {
+        message = InventoryConstants.OutofStockErrorMessage
+                  + sell.ProductName
+                  + " : "
+                  + response.Result?.FirstOrDefault().Quantity.Value;
+        return false;
+      }
+      message = InventoryConstants.SuccessMessage;
+      return true;
+    }
 
-        public async Task afterSellStockModification(Sell sell)
-        {
-            var filterParameters = new Dictionary<string, object>()
+    public async Task afterSellStockModification(Sell sell)
+    {
+      var filterParameters = new Dictionary<string, object>()
               {
                 {nameof(Stock.ProductId),sell.ProductId}
               };
 
-            var response = await _stockRepository
-                            .QueryCollectionAsync(new Stock(),filterParameters);
+      var response = await _stockRepository
+                      .QueryCollectionAsync(new Stock(), filterParameters);
 
-            var ProductStock = response.FirstOrDefault();
-            ProductStock.Quantity -= sell.Quantity;
-            await _stockRepository.Update(ProductStock);
-        }
+      var ProductStock = response.FirstOrDefault();
+      ProductStock.Quantity -= sell.Quantity;
+      await _stockRepository.Update(ProductStock);
     }
+  }
 }

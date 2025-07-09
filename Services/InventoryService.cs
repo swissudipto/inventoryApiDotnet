@@ -67,11 +67,10 @@ namespace inventoryApiDotnet.Services
 
         public async Task savePurchase(Purchase obj)
         {
-            var product = await _productservice.GetProductById((long)obj.ProductId);
-            obj.ProductName = product.ProductName;
             obj.transactionDateTime = DateTime.Now;
+            obj.PurchaseId = await _purchaseRepository.GetCollectionCount() + 1;
             await _purchaseRepository.Add(obj);
-            await _Stockservice.AddNewStock(obj);
+            obj.purchaseItems?.ForEach(item => _Stockservice.AddNewStock(item));
         }
         
         public async Task<string> saveNewSell(Sell sell)

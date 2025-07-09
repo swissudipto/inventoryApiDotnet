@@ -18,7 +18,8 @@ namespace inventoryApiDotnet.Services
 
         public async Task<IEnumerable<Product>> GetAllProducts()
         {
-            return await _productRepository.GetAll();
+            var result = await _productRepository.GetAll();
+            return result.Where(t => t.ProductName != "");
         }
 
         public async Task<Product> SaveProduct(Product obj)
