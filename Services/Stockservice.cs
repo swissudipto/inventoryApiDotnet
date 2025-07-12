@@ -32,14 +32,17 @@ namespace inventoryApiDotnet.Services
         {
           ProductId = obj.ProductId > 0 ? obj.ProductId : 0,
           ProductName = product.ProductName != null ? product.ProductName : "",
-          Quantity = obj.Quantity > 0 ? obj.Quantity : 0
+          Quantity = obj.Quantity > 0 ? obj.Quantity : 0,
+          AvarageBuyingPrice = Math.Round((double)obj.Amount/obj.Quantity,2)
         };
         await _stockRepository.Add(newStock);
       }
       else
       {
         var existingstock = response.FirstOrDefault();
+        var newAvarageBuyingprice = Math.Round((double)obj.Amount / obj.Quantity, 2);
         existingstock.Quantity += obj.Quantity;
+        existingstock.AvarageBuyingPrice = Math.Round((double)(existingstock.AvarageBuyingPrice + newAvarageBuyingprice)/2, 2);
         await _stockRepository.Update(existingstock);
       }
       return "success";

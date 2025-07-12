@@ -101,3 +101,6 @@ D:\inventoryApiDotnet\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeti
 D:\inventoryApiDotnet\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.inventoryApiDotnet.props
 D:\inventoryApiDotnet\obj\Debug\net6.0\staticwebassets.pack.json
 D:\inventoryApiDotnet\obj\Debug\net6.0\inventor.5F7EBD93.Up2Date
+D:\inventoryApiDotnet\bin\Debug\net6.0\FluentValidation.dll
+D:\inventoryApiDotnet\bin\Debug\net6.0\FluentValidation.AspNetCore.dll
+D:\inventoryApiDotnet\bin\Debug\net6.0\FluentValidation.DependencyInjectionExtensions.dll

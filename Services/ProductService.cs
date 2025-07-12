@@ -39,5 +39,15 @@ namespace inventoryApiDotnet.Services
             var response = await _productRepository.QueryCollectionAsync(new Product(), filterParameters);
             return response != null ? response.FirstOrDefault() : null;
         }
+
+        public async Task<bool> IsProductNameExists(string? productName)
+        {
+            var filterParameters = new Dictionary<string, object>()
+              {
+                {nameof(Product.ProductName),productName.Trim()}
+              };
+            var response = await _productRepository.QueryCollectionAsync(new Product(), filterParameters);
+            return response.Count() == 0 ? false : true;
+        }
     }
 }

@@ -1,18 +1,16 @@
-using inventoryApiDotnet.Context;
-using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
-using inventoryApiDotnet.Services;
-using inventoryApiDotnet.Repository;
 using MongoDB.Bson.Serialization;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson.Serialization.IdGenerators;
 using inventoryApiDotnet.Serviceregistration;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add Validators 
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
+
 // Add services to the container.
-builder.Services.AddControllers();               
+builder.Services.AddControllers();
 
 // Registers all the application Services & Repositories
 builder.Services.RegisterServices();
@@ -31,8 +29,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+  app.UseSwagger();
+  app.UseSwaggerUI();
 }
 
 app.UseCors(
