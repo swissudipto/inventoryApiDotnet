@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace inventoryApiDotnet.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
-        
-        public ProductController(IProductService productService)
+        private readonly IValidator<Product> _validator;
+        public ProductController(IProductService productService,
+                                 IValidator<Product> validator)
         {
             _productService = productService;
+            _validator = validator;
         }
 
         /// <summary>
@@ -37,9 +40,17 @@ namespace inventoryApiDotnet.Controllers
         [HttpPost("saveProduct")]
         public async Task<ActionResult<Product>> SaveProduct(Product obj)
         {
+            var validationResult = await _validator.ValidateAsync(obj);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "New Product Details are not Valid.",
+                    Errors = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                });
+            }
             var result = await _productService.SaveProduct(obj);
             return Ok(result);
-        }
-    
+        }   
     }
 }

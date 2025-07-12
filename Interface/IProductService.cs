@@ -12,5 +12,6 @@ namespace inventoryApiDotnet.Interface
         Task<Product> SaveProduct(Product obj);
         Task<IEnumerable<Product>> GetAllProducts();
         Task<Product> GetProductById(long productID);
+        Task<bool> IsProductNameExists(string productName);
     }
 }

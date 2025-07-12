@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
 using Microsoft.AspNetCore.Mvc;
+using ServiceStack.Messaging;
 
 namespace inventoryApiDotnet.Controllers
 {
@@ -13,11 +15,15 @@ namespace inventoryApiDotnet.Controllers
     {
         private readonly IIntentoryService _inventoryService;
         private readonly IStockservice _stockservice;
+        private readonly IValidator<Purchase> _validator;
 
-        public InventoryController(IIntentoryService intentoryService, IStockservice stockservice)
+        public InventoryController(IIntentoryService intentoryService,
+                                   IStockservice stockservice,
+                                   IValidator<Purchase> validator)
         {
             _inventoryService = intentoryService;
             _stockservice = stockservice;
+            _validator = validator;
         }
 
         /// <summary>
@@ -28,16 +34,17 @@ namespace inventoryApiDotnet.Controllers
         [HttpPost("savepurchase")]
         public async Task<IActionResult> SavePurchase(Purchase obj)
         {
+            var validationResult = await _validator.ValidateAsync(obj);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "Purchase Details are not Valid.",
+                    Errors = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                });
+            }
             await _inventoryService.savePurchase(obj);
             return Ok();
-        }
-
-        [Obsolete]
-        [HttpGet("getallpurchase_Obsolete")]
-        public async Task<ActionResult<List<Purchase>>> GetAllPurchase()
-        {
-            var result = await _inventoryService.getallpurchase();
-            return Ok(result);
         }
 
         /// <summary>
@@ -57,14 +64,6 @@ namespace inventoryApiDotnet.Controllers
             return Ok(result);
         }
 
-        [Obsolete]
-        [HttpGet("getallStock_Obsolete")]
-        public async Task<ActionResult<Stock>> GetAllStock()
-        {
-            var result = await _stockservice.GetAllStock();
-            return Ok(result);
-        }
-
         /// <summary>
         /// Gets all the Stock according to pagination
         /// </summary>
@@ -79,14 +78,6 @@ namespace inventoryApiDotnet.Controllers
                 return BadRequest(new { Message = "Page and pageSize must be greater than 0." });
             }
             var result = await _stockservice.GetAllStock(page, pageSize);
-            return Ok(result);
-        }
-
-        [Obsolete]
-        [HttpGet("getallsell_Obsolete")]
-        public async Task<IActionResult> GetAllSell()
-        {
-            var result = await _inventoryService.getallsell();
             return Ok(result);
         }
 

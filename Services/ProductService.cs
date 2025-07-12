@@ -18,7 +18,8 @@ namespace inventoryApiDotnet.Services
 
         public async Task<IEnumerable<Product>> GetAllProducts()
         {
-            return await _productRepository.GetAll();
+            var result = await _productRepository.GetAll();
+            return result.Where(t => t.ProductName != "");
         }
 
         public async Task<Product> SaveProduct(Product obj)
@@ -37,6 +38,16 @@ namespace inventoryApiDotnet.Services
               };
             var response = await _productRepository.QueryCollectionAsync(new Product(), filterParameters);
             return response != null ? response.FirstOrDefault() : null;
+        }
+
+        public async Task<bool> IsProductNameExists(string? productName)
+        {
+            var filterParameters = new Dictionary<string, object>()
+              {
+                {nameof(Product.ProductName),productName.Trim()}
+              };
+            var response = await _productRepository.QueryCollectionAsync(new Product(), filterParameters);
+            return response.Count() == 0 ? false : true;
         }
     }
 }
