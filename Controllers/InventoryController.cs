@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FluentValidation;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
 using Microsoft.AspNetCore.Mvc;
-using ServiceStack.Messaging;
 
 namespace inventoryApiDotnet.Controllers
 {
@@ -15,15 +10,18 @@ namespace inventoryApiDotnet.Controllers
     {
         private readonly IIntentoryService _inventoryService;
         private readonly IStockservice _stockservice;
-        private readonly IValidator<Purchase> _validator;
+        private readonly IValidator<Purchase> _purchaseValidator;
+        private readonly IValidator<Sell> _sellValidator;
 
         public InventoryController(IIntentoryService intentoryService,
                                    IStockservice stockservice,
-                                   IValidator<Purchase> validator)
+                                   IValidator<Purchase> purchaseValidator,
+                                   IValidator<Sell> sellValidator)
         {
             _inventoryService = intentoryService;
             _stockservice = stockservice;
-            _validator = validator;
+            _purchaseValidator = purchaseValidator;
+            _sellValidator = sellValidator;
         }
 
         /// <summary>
@@ -34,7 +32,7 @@ namespace inventoryApiDotnet.Controllers
         [HttpPost("savepurchase")]
         public async Task<IActionResult> SavePurchase(Purchase obj)
         {
-            var validationResult = await _validator.ValidateAsync(obj);
+            var validationResult = await _purchaseValidator.ValidateAsync(obj);
             if (!validationResult.IsValid)
             {
                 return BadRequest(new
@@ -54,7 +52,7 @@ namespace inventoryApiDotnet.Controllers
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet("getallpurchase")]
-        public async Task<IActionResult> GetAllpurchase([FromQuery]int page = 1, [FromQuery]int pageSize = 100)
+        public async Task<IActionResult> GetAllpurchase([FromQuery] int page = 1, [FromQuery] int pageSize = 100)
         {
             if (page < 1 || pageSize < 1)
             {
@@ -71,7 +69,7 @@ namespace inventoryApiDotnet.Controllers
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet("getallStock")]
-        public async Task<ActionResult<Stock>> GetAllStock([FromQuery]int page = 1,[FromQuery]int pageSize = 100)
+        public async Task<ActionResult<Stock>> GetAllStock([FromQuery] int page = 1, [FromQuery] int pageSize = 100)
         {
             if (page < 1 || pageSize < 1)
             {
@@ -88,7 +86,7 @@ namespace inventoryApiDotnet.Controllers
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet("getallsell")]
-        public async Task<IActionResult> GetAllSell([FromQuery]int page = 1,[FromQuery] int pageSize = 100)
+        public async Task<ActionResult<PagedResult<Sell>>> GetAllSell([FromQuery] int page = 1, [FromQuery] int pageSize = 100)
         {
             if (page < 1 || pageSize < 1)
             {
@@ -106,6 +104,15 @@ namespace inventoryApiDotnet.Controllers
         [HttpPost("savesell")]
         public async Task<IActionResult> SaveSell(Sell obj)
         {
+            var validationResult = await _sellValidator.ValidateAsync(obj);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "Sell Details are not Valid.",
+                    Errors = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                });
+            }
             var response = await _inventoryService.saveNewSell(obj);
             if (response != "Success")
             {

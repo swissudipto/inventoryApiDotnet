@@ -1,7 +1,6 @@
 using inventoryApiDotnet.Constants;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
-using ServiceStack;
 
 namespace inventoryApiDotnet.Services
 {
@@ -40,6 +39,5 @@ namespace inventoryApiDotnet.Services
                                  + currentCounter.ToString().PadLeft(6,'0');
             return InvoiceNumber;
         }
-
     }
 }

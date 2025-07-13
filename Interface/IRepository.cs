@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace inventoryApiDotnet.Interface
+﻿namespace inventoryApiDotnet.Interface
 {
     public interface IRepository<TEntity> : IDisposable where TEntity : class
     {

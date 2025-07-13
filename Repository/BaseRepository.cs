@@ -1,9 +1,6 @@
 ﻿using MongoDB.Driver;
 using inventoryApiDotnet.Interface;
 using ServiceStack;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using MongoDB.Bson;
 
 namespace inventoryApiDotnet.Repository

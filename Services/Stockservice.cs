@@ -33,7 +33,7 @@ namespace inventoryApiDotnet.Services
           ProductId = obj.ProductId > 0 ? obj.ProductId : 0,
           ProductName = product.ProductName != null ? product.ProductName : "",
           Quantity = obj.Quantity > 0 ? obj.Quantity : 0,
-          AvarageBuyingPrice = Math.Round((double)obj.Amount/obj.Quantity,2)
+          AvarageBuyingPrice = Math.Round((double)obj.Amount / obj.Quantity, 2)
         };
         await _stockRepository.Add(newStock);
       }
@@ -42,7 +42,7 @@ namespace inventoryApiDotnet.Services
         var existingstock = response.FirstOrDefault();
         var newAvarageBuyingprice = Math.Round((double)obj.Amount / obj.Quantity, 2);
         existingstock.Quantity += obj.Quantity;
-        existingstock.AvarageBuyingPrice = Math.Round((double)(existingstock.AvarageBuyingPrice + newAvarageBuyingprice)/2, 2);
+        existingstock.AvarageBuyingPrice = Math.Round((double)(existingstock.AvarageBuyingPrice + newAvarageBuyingprice) / 2, 2);
         await _stockRepository.Update(existingstock);
       }
       return "success";
@@ -51,29 +51,31 @@ namespace inventoryApiDotnet.Services
     public async Task<List<Stock>> GetAllStock()
     {
       var response = await _stockRepository.GetAll();
-      return response.OrderByDescending(x => x.Quantity).ToList();
+      return response.Where(y => y.Quantity > 0)
+                     .OrderByDescending(x => x.Quantity).ToList();
     }
 
     public async Task<List<Stock>> GetAllStock(int page, int pageSize)
-    {
+    { 
       var response = await _stockRepository.GetAllbyPage(page, pageSize);
-      return response.OrderByDescending(x => x.Quantity).ToList();
+      return response.Where(y => y.Quantity > 0)
+                     .OrderByDescending(x => x.Quantity).ToList();
     }
 
-    public Boolean checkIfProductInStock(Sell sell, out string message)  // Need To test this Method
+    public Boolean checkIfProductInStock(SellItem sellItem, out string message)  // Need To test this Method
     {
       var filterParameters = new Dictionary<string, object>()
               {
-                {nameof(sell.ProductId),sell.ProductId}
+                {nameof(sellItem.ProductId),sellItem.ProductId}
               };
 
       var response = _stockRepository
                     .QueryCollectionAsync(new Stock(), filterParameters);
 
-      if (response?.Result?.FirstOrDefault()?.Quantity.Value < sell.Quantity)
+      if (response?.Result?.FirstOrDefault()?.Quantity.Value < sellItem.Quantity)
       {
         message = InventoryConstants.OutofStockErrorMessage
-                  + sell.ProductName
+                  + sellItem.ProductName
                   + " : "
                   + response.Result?.FirstOrDefault().Quantity.Value;
         return false;
@@ -82,19 +84,37 @@ namespace inventoryApiDotnet.Services
       return true;
     }
 
-    public async Task afterSellStockModification(Sell sell)
+    public async Task afterSellStockModification(SellItem sellItem)
     {
       var filterParameters = new Dictionary<string, object>()
               {
-                {nameof(Stock.ProductId),sell.ProductId}
+                {nameof(Stock.ProductId),sellItem.ProductId}
               };
 
       var response = await _stockRepository
                       .QueryCollectionAsync(new Stock(), filterParameters);
 
       var ProductStock = response.FirstOrDefault();
-      ProductStock.Quantity -= sell.Quantity;
+      ProductStock.Quantity -= sellItem.Quantity;
+      ProductStock.AvarageBuyingPrice = ProductStock.Quantity == 0 ? 0 : ProductStock.AvarageBuyingPrice;
       await _stockRepository.Update(ProductStock);
+    }
+
+    public async Task<Stock> GetStockByProductId(long productId)
+    {
+      var filterParameters = new Dictionary<string, object>()
+              {
+                {nameof(Stock.ProductId),productId}
+              };
+
+      var response = await _stockRepository.QueryCollectionAsync(new Stock(), filterParameters);
+
+      if (response == null)
+      {
+        throw new Exception($"No stock found for ProductId: {productId}");
+      }
+
+      return response.FirstOrDefault() ?? new Stock();
     }
   }
 }
