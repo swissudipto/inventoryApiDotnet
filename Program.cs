@@ -38,7 +38,7 @@ app.UseCors(
                     .AllowAnyMethod()
                     .AllowAnyHeader());
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
