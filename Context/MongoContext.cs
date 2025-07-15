@@ -1,10 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using inventoryApiDotnet.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using inventoryApiDotnet.Model;
 

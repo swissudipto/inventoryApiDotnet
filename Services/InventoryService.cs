@@ -1,30 +1,25 @@
+using inventoryApiDotnet.Constants;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace inventoryApiDotnet.Services
 {
     public class InventoryService : IIntentoryService
     {
-        public readonly MongoDBService _mongoDBService;
         public readonly IPurchaseRepository _purchaseRepository;
         public readonly IStockservice _Stockservice;
-        public readonly IProductService _productservice;
         public readonly ISellRepository _sellRepository;
         public readonly IInvoiceCounterService _invoiceCounterService;
 
-        public InventoryService(MongoDBService mongoDBService,
-                                IPurchaseRepository purchaseRepository,
+        public InventoryService(IPurchaseRepository purchaseRepository,
                                 IStockservice Stockservice,
-                                IProductService productService,
                                 ISellRepository sellRepository,
                                 IInvoiceCounterService invoiceCounterService)
         {
-            _mongoDBService = mongoDBService;
             _purchaseRepository = purchaseRepository;
             _Stockservice = Stockservice;
-            _productservice = productService;
             _sellRepository = sellRepository;
             _invoiceCounterService = invoiceCounterService;
         }
@@ -42,10 +37,10 @@ namespace inventoryApiDotnet.Services
 
         public async Task<PagedResult<Purchase>> getallpurchase(int page, int pageSize)
         {
-            var allPurchaseList = await _purchaseRepository.GetAllbyPage(page,pageSize);
+            var allPurchaseList = await _purchaseRepository.GetAllbyPage(page, pageSize);
             var totalRecords = await _purchaseRepository.GetCollectionCount();
 
-            return new PagedResult<Purchase>(allPurchaseList.ToList(),totalRecords,page,pageSize);
+            return new PagedResult<Purchase>(allPurchaseList.ToList(), totalRecords, page, pageSize);
         }
 
         public async Task<IEnumerable<Sell>> getallsell()
@@ -54,15 +49,11 @@ namespace inventoryApiDotnet.Services
             return allSellList.OrderByDescending(x => x.transactionDateTime).ToList();
         }
 
-        public async Task<IEnumerable<Sell>> getallsell(int page, int pageSize)
+        public async Task<PagedResult<Sell>> getallsell(int page, int pageSize)
         {
-            var allSellList = await _sellRepository.GetAllbyPage(page,pageSize);
-            return allSellList.OrderByDescending(x => x.transactionDateTime).ToList();
-        }
-
-        public async Task<IActionResult> getallStock(Purchase obj)
-        {
-            throw new NotImplementedException();
+            var allSellList = await _sellRepository.GetAllbyPage(page, pageSize);
+            var totalRecords = await _sellRepository.GetCollectionCount();
+            return new PagedResult<Sell>(allSellList.ToList(), totalRecords, page, pageSize);
         }
 
         public async Task savePurchase(Purchase obj)
@@ -72,21 +63,26 @@ namespace inventoryApiDotnet.Services
             await _purchaseRepository.Add(obj);
             obj.purchaseItems?.ForEach(item => _Stockservice.AddNewStock(item));
         }
-        
+
+        // This Method Require Modification. Unit of Work Should be implemented
+        // Throgh Testing testing is required for this method
         public async Task<string> saveNewSell(Sell sell)
-        { 
+        {
             string message;
-            var response = _Stockservice.checkIfProductInStock(sell, out message);
-            if (!response)
+            foreach (SellItem item in sell.SellItems)
             {
-                return message;
+                var response = _Stockservice.checkIfProductInStock(item, out message);
+                if (!response)
+                {
+                    return message;
+                }
+                await _Stockservice.afterSellStockModification(item);
             }
+
             sell.InvoiceNo = await _invoiceCounterService.GenerateInvoiceNumber();
             sell.transactionDateTime = DateTime.Now;
             await _sellRepository.Add(sell);
-            await _Stockservice.afterSellStockModification(sell);
-            return message;
+            return InventoryConstants.SuccessMessage;
         }
-
     }
 }

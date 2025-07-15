@@ -1,18 +1,15 @@
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
-using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 
 namespace inventoryApiDotnet.Services
 {
     public class ProductService : IProductService
     {
-        public readonly MongoDBService _mongoDBService;
         public readonly IProductRepository _productRepository;
 
-        public ProductService(MongoDBService mongoDBService, IProductRepository productRepository)
+        public ProductService(IProductRepository productRepository)
         {
-            _mongoDBService = mongoDBService;
             _productRepository = productRepository;
         }
 

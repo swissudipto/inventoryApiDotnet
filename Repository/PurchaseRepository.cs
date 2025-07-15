@@ -1,8 +1,6 @@
 ﻿using inventoryApiDotnet.Model;
 using inventoryApiDotnet.Interface;
-using inventoryApiDotnet.Repository;
 using MongoDB.Driver;
-using MongoDB.Bson;
 
 namespace inventoryApiDotnet.Repository
 {

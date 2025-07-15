@@ -5,6 +5,7 @@ using inventoryApiDotnet.Model;
 internal sealed class ProductValidator : AbstractValidator<Product>
 {
     private readonly IProductService _productService;
+
     public ProductValidator(IProductService productService)
     {
         _productService = productService;
@@ -15,7 +16,7 @@ internal sealed class ProductValidator : AbstractValidator<Product>
         .NotNull()
         .WithMessage("Product Name Cannot be null on New Product save!")
         .MustAsync(BeAUniqueProductName)
-        .WithMessage("The Product is already exists in our System.Enter a New Product Name!");
+        .WithMessage("The Product is already exists in our System. Enter a New Product Name!");
     }
 
     public async Task<bool> BeAUniqueProductName(string? name, CancellationToken cancellationToken)
