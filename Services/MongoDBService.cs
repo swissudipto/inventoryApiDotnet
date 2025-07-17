@@ -11,6 +11,17 @@ public class MongoDBService
 
     public MongoDBService(IOptions<MongoDBSettings> mongoDBsettings)
     {
+        // Override URI using environment variable if present (for Render)
+        var connFromEnv = Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING");
+        var dbnameFromEnv = Environment.GetEnvironmentVariable("MONGO_DB_NAME");
+        var collectionFromEnv = Environment.GetEnvironmentVariable("MONGO_COLLECTION_NAME");
+
+        if (!string.IsNullOrEmpty(connFromEnv))
+        {
+            mongoDBsettings.Value.ConnectionURI = connFromEnv;
+            mongoDBsettings.Value.DatabaseName = dbnameFromEnv;
+            mongoDBsettings.Value.CollectionName = collectionFromEnv;
+        }
         MongoClient client = new MongoClient(mongoDBsettings.Value.ConnectionURI);
         IMongoDatabase database = client.GetDatabase(mongoDBsettings.Value.DatabaseName);
         PurchaseCollection = database.GetCollection<Purchase>(mongoDBsettings.Value.CollectionName);

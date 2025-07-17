@@ -11,7 +11,7 @@ namespace inventoryApiDotnet.Context
         public IClientSessionHandle Session { get; set; }
         public MongoClient MongoClient { get; set; }
         private readonly List<Func<Task>> _commands;
-        private readonly IOptions<MongoDBSettings> _mongoDBsettings; 
+        private readonly IOptions<MongoDBSettings> _mongoDBsettings;
 
         public MongoContext(IOptions<MongoDBSettings> mongoDBsettings)
         {
@@ -19,6 +19,18 @@ namespace inventoryApiDotnet.Context
 
             // Every command will be stored and it'll be processed at SaveChanges
             _commands = new List<Func<Task>>();
+
+            // Override URI using environment variable if present (for Render)
+            var connFromEnv = Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING");
+            var dbnameFromEnv = Environment.GetEnvironmentVariable("MONGO_DB_NAME");
+            var collectionFromEnv = Environment.GetEnvironmentVariable("MONGO_COLLECTION_NAME");
+
+            if (!string.IsNullOrEmpty(connFromEnv))
+            {
+                mongoDBsettings.Value.ConnectionURI = connFromEnv;
+                mongoDBsettings.Value.DatabaseName = dbnameFromEnv;
+                mongoDBsettings.Value.CollectionName = collectionFromEnv;
+            }
         }
 
         public async Task<int> SaveChanges()
@@ -54,7 +66,7 @@ namespace inventoryApiDotnet.Context
 
         public IMongoCollection<T> GetCollection<T>(string name)
         {
-            ConfigureMongo();  
+            ConfigureMongo();
             return Database.GetCollection<T>(name);
         }
 
