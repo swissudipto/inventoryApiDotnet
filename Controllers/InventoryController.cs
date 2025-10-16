@@ -46,6 +46,27 @@ namespace inventoryApiDotnet.Controllers
         }
 
         /// <summary>
+        /// Edits a new Purchase Record from Database
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        [HttpPost("editPurchase")]
+        public async Task<IActionResult> editPurchase(Purchase obj)
+        {
+            var validationResult = await _purchaseValidator.ValidateAsync(obj);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "Purchase Details are not Valid.",
+                    Errors = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                });
+            }
+            await _inventoryService.editPurchase(obj);
+            return Ok();
+        }
+
+        /// <summary>
         /// Gets all the purchases according to pagination
         /// </summary>
         /// <param name="page"></param>
@@ -118,6 +139,27 @@ namespace inventoryApiDotnet.Controllers
             {
                 return BadRequest(response);
             }
+            return Ok();
+        }
+
+        /// <summary>
+        /// Edits a Sell record from Database
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        [HttpPost("editSell")]
+        public async Task<IActionResult> editSell(Sell obj)
+        {
+            var validationResult = await _sellValidator.ValidateAsync(obj);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(new
+                {
+                    Message = "Sell Details are not Valid.",
+                    Errors = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                });
+            }
+            await _inventoryService.editSell(obj);
             return Ok();
         }
     }
