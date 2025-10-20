@@ -1,10 +1,12 @@
 using FluentValidation;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace inventoryApiDotnet.Controllers
 {
+    [Authorize]
     [ApiController]
     public class ProductController : ControllerBase
     {
