@@ -13,7 +13,6 @@ Designed for small businesses to track product movements with support for serial
 - 🔄 **Automatic Stock Adjustment on Sell/Purchase**
 - 🧾 **Paginated, Searchable API Endpoints**
 - 🌐 **Integrated with Angular Frontend (AG Grid UI)**
-- 🪶 **Built with Entity Framework Core + SQL Server**
 
 ---
 
