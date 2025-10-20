@@ -1,10 +1,12 @@
 using FluentValidation;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace inventoryApiDotnet.Controllers
 {
+    [Authorize]
     [ApiController]
     public class InventoryController : ControllerBase
     {
@@ -50,6 +52,7 @@ namespace inventoryApiDotnet.Controllers
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost("editPurchase")]
         public async Task<IActionResult> editPurchase(Purchase obj)
         {
@@ -147,6 +150,7 @@ namespace inventoryApiDotnet.Controllers
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost("editSell")]
         public async Task<IActionResult> editSell(Sell obj)
         {

@@ -1,8 +1,10 @@
 using inventoryApiDotnet.Model;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
-using inventoryApiDotnet.Serviceregistration;
+using inventoryApiDotnet.ServiceregistrationExtension;
 using FluentValidation;
+using inventoryApiDotnet.AuthenticationExtension;
+using inventoryApiDotnet.AuthorizationExtension;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,12 @@ builder.Services.AddControllers();
 
 // Registers all the application Services & Repositories
 builder.Services.RegisterServices();
+
+// Add Authentication
+builder.Services.AddAuthenticationExt(builder.Configuration);
+
+// Add Authorization Policies
+builder.Services.AddAuthorizationPolicies();
 
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 
