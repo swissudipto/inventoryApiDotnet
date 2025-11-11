@@ -3,12 +3,13 @@
     public interface IRepository<TEntity> : IDisposable where TEntity : class
     {
         Task Add(TEntity obj);
-        Task<TEntity> GetById(Guid id);
+        Task AddRange(List<TEntity> obj);
+        Task<TEntity> GetById(long id);
         Task<IEnumerable<TEntity>> GetAll();
-        Task<bool> Update(TEntity obj);
+        Task Update(TEntity obj);
         void Remove(Guid id);
         Task<long> GetCollectionCount();
         Task<List<TEntity>> QueryCollectionAsync(TEntity obj,Dictionary<string, object> filterParameters);
-        Task<IEnumerable<TEntity>> GetAllbyPage(int page, int pageSize);
+        Task<IEnumerable<TEntity>> GetAllbyPage(int page, int pageSize);      
     }
 }

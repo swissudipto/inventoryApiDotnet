@@ -42,12 +42,12 @@ internal sealed class SellValidator : AbstractValidator<Sell>
 
     private async Task<bool> BeinStockQuantities(Sell sell)
     {
-        var response = await _inventoryService.GetSellDetailsfromDB(sell.Id ?? "");
-        var isEditMode = response.Count == 0 ? false : true;
+        var response = await _inventoryService.GetSellDetailsfromDB(sell.Id ?? 0);
+        var isEditMode = response == null ? false : true;
         if (isEditMode)
         {
             var newSellItems = sell.SellItems;
-            var oldSellItems = response?.FirstOrDefault()?.SellItems;
+            var oldSellItems = response?.SellItems;
 
 
             foreach (var item in newSellItems ?? new List<SellItem>())
