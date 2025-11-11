@@ -5,7 +5,7 @@ namespace inventoryApiDotnet.Repository
 {
     public class InvoiceCounterRepository : BaseRepository<InvoiceCounter>, IInvoiceCounterRepository
     {
-        public InvoiceCounterRepository(IMongoContext context) : base(context)
+        public InvoiceCounterRepository(AppDbContext context) : base(context)
         {
         }
     }

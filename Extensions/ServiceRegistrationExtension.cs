@@ -22,6 +22,9 @@ public static class ServiceRegistrationExtension
         services.AddScoped<ISellRepository, SellRepository>();
         services.AddScoped<IInvoiceCounterService, InvoiceCounterService>();
         services.AddScoped<IInvoiceCounterRepository, InvoiceCounterRepository>();
+        services.AddScoped<ISellItemRepository, SellItemRepository>();
+        services.AddScoped<IPurchaseItemRepository, PurchaseItemRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

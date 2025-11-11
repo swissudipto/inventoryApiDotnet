@@ -5,14 +5,29 @@ using inventoryApiDotnet.ServiceregistrationExtension;
 using FluentValidation;
 using inventoryApiDotnet.AuthenticationExtension;
 using inventoryApiDotnet.AuthorizationExtension;
+using inventoryApiDotnet.Extensions;
+using inventoryApiDotnet.Repository;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//ConnectionTester.TestConnection(builder.Configuration["ConnectionString:DefaultConnection"]);
+
+var connFromEnv = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING");
+// Add PostgreSQL EF Core
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(!string.IsNullOrEmpty(connFromEnv)? connFromEnv : builder.Configuration["ConnectionString:DefaultConnection"])
+);
 
 // Add Validators 
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+    {
+      options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+      options.JsonSerializerOptions.WriteIndented = true;
+    }); ;
 
 // Registers all the application Services & Repositories
 builder.Services.RegisterServices();

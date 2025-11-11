@@ -12,6 +12,6 @@ namespace inventoryApiDotnet.Interface
         Task<string> saveNewSell(Sell sell);
         Task editSell(Sell obj);
         Task editPurchase(Purchase obj);
-        Task<List<Sell>> GetSellDetailsfromDB(string id);
+        Task<Sell> GetSellDetailsfromDB(long id);
     }
 }

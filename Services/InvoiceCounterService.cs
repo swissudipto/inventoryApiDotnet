@@ -17,7 +17,7 @@ namespace inventoryApiDotnet.Services
         {
             long currentCounter = 0;
             var response = await _invoiceCounterRepository.GetAll();
-            if (response.FirstOrDefault() == null)
+            if (response.Count() == 0)
             {
                 var firstInsert = new InvoiceCounter()
                 {
@@ -35,7 +35,7 @@ namespace inventoryApiDotnet.Services
             }
 
             string InvoiceNumber = InventoryConstants.InvoiceNumberInitials + "-"
-                                 + DateTime.Now.Year.ToString() + "-"
+                                 + DateTime.UtcNow.Year.ToString() + "-"
                                  + currentCounter.ToString().PadLeft(6,'0');
             return InvoiceNumber;
         }
