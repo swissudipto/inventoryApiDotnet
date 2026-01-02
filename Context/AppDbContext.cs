@@ -33,6 +33,10 @@ namespace inventoryApiDotnet.Repository
                 .WithOne(pi => pi.Sell)
                 .HasForeignKey(pi => pi.InvoiceNo)
                 .OnDelete(DeleteBehavior.Cascade); // when Purchase deleted, delete items too
+
+            modelBuilder.Entity<SerialNumbers>()
+                .HasIndex(s => s.serial)
+                .IsUnique();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace inventoryApiDotnet.Model
 {
@@ -16,6 +17,7 @@ namespace inventoryApiDotnet.Model
     public string? Comment { get; set; }
     public DateTime? transactionDateTime { get; set; }
     public ICollection<PurchaseItem>? purchaseItems { get; set; }
+    public ICollection<SerialNumbers>? SerialNumbers { get; set; }
     public double? TotalAmount { get; set; }
   }
 
@@ -30,6 +32,18 @@ namespace inventoryApiDotnet.Model
     public long ProductId { get; set; }
     public long Quantity { get; set; }
     public long Amount { get; set; }
+    [ForeignKey("PurchaseId")]
+    public Purchase? Purchase { get; set; } = null!;
+  }
+
+  public class SerialNumbers
+  {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public long? Id { get; set; }
+    public long? PurchaseId { get; set; }
+    public long ProductId { get; set; }
+    public string? serial { get; set; }
     [ForeignKey("PurchaseId")]
     public Purchase? Purchase { get; set; } = null!;
   }

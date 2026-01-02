@@ -1,3 +1,4 @@
+using AutoMapper;
 using FluentValidation;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
@@ -12,18 +13,21 @@ namespace inventoryApiDotnet.Controllers
     {
         private readonly IIntentoryService _inventoryService;
         private readonly IStockservice _stockservice;
-        private readonly IValidator<Purchase> _purchaseValidator;
+        private readonly IValidator<PurchaseDto> _purchaseValidator;
         private readonly IValidator<Sell> _sellValidator;
+        private readonly IMapper _mapper;
 
         public InventoryController(IIntentoryService intentoryService,
                                    IStockservice stockservice,
-                                   IValidator<Purchase> purchaseValidator,
-                                   IValidator<Sell> sellValidator)
+                                   IValidator<PurchaseDto> purchaseValidator,
+                                   IValidator<Sell> sellValidator,
+                                   IMapper mapper)
         {
             _inventoryService = intentoryService;
             _stockservice = stockservice;
             _purchaseValidator = purchaseValidator;
             _sellValidator = sellValidator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -32,7 +36,7 @@ namespace inventoryApiDotnet.Controllers
         /// <param name="obj"></param>
         /// <returns></returns>
         [HttpPost("savepurchase")]
-        public async Task<IActionResult> SavePurchase(Purchase obj)
+        public async Task<IActionResult> SavePurchase(PurchaseDto obj)
         {
             var validationResult = await _purchaseValidator.ValidateAsync(obj);
             if (!validationResult.IsValid)
@@ -43,7 +47,8 @@ namespace inventoryApiDotnet.Controllers
                     Errors = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
                 });
             }
-            await _inventoryService.savePurchase(obj);
+            var purchaseObj = _mapper.Map<Purchase>(obj);
+            await _inventoryService.savePurchase(purchaseObj);
             return Ok();
         }
 
@@ -54,7 +59,7 @@ namespace inventoryApiDotnet.Controllers
         /// <returns></returns>
         [Authorize(Policy = "AdminOnly")]
         [HttpPost("editPurchase")]
-        public async Task<IActionResult> editPurchase(Purchase obj)
+        public async Task<IActionResult> editPurchase(PurchaseDto obj)
         {
             var validationResult = await _purchaseValidator.ValidateAsync(obj);
             if (!validationResult.IsValid)
@@ -65,7 +70,8 @@ namespace inventoryApiDotnet.Controllers
                     Errors = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
                 });
             }
-            await _inventoryService.editPurchase(obj);
+            var purchaseObj = _mapper.Map<Purchase>(obj);
+            await _inventoryService.editPurchase(purchaseObj);
             return Ok();
         }
 

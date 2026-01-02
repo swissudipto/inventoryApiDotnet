@@ -195,6 +195,30 @@ namespace inventoryApiDotnet.Migrations
                     b.ToTable("SellItem");
                 });
 
+            modelBuilder.Entity("inventoryApiDotnet.Model.SerialNumbers", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("PurchaseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("serial")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PurchaseId");
+
+                    b.ToTable("SerialNumbers");
+                });
+
             modelBuilder.Entity("inventoryApiDotnet.Model.Stock", b =>
                 {
                     b.Property<string>("Id")
@@ -259,8 +283,19 @@ namespace inventoryApiDotnet.Migrations
                     b.Navigation("Sell");
                 });
 
+            modelBuilder.Entity("inventoryApiDotnet.Model.SerialNumbers", b =>
+                {
+                    b.HasOne("inventoryApiDotnet.Model.Purchase", "Purchase")
+                        .WithMany("SerialNumbers")
+                        .HasForeignKey("PurchaseId");
+
+                    b.Navigation("Purchase");
+                });
+
             modelBuilder.Entity("inventoryApiDotnet.Model.Purchase", b =>
                 {
+                    b.Navigation("SerialNumbers");
+
                     b.Navigation("purchaseItems");
                 });
 

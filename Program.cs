@@ -38,6 +38,9 @@ builder.Services.AddAuthenticationExt(builder.Configuration);
 // Add Authorization Policies
 builder.Services.AddAuthorizationPolicies();
 
+// Add Auto Mapper
+builder.Services.AddAutoMapper();
+
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

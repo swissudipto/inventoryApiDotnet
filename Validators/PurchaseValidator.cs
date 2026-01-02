@@ -2,7 +2,7 @@
 using FluentValidation;
 using inventoryApiDotnet.Model;
 
-internal sealed class PurchaseValidator : AbstractValidator<Purchase>
+internal sealed class PurchaseValidator : AbstractValidator<PurchaseDto>
 {
     public PurchaseValidator()
     {
@@ -30,6 +30,12 @@ internal sealed class PurchaseValidator : AbstractValidator<Purchase>
         .NotEmpty()
         .WithMessage("The Purchase Items must Contain atleast 1 item");
 
+        RuleFor(x => x.SerialNumbers)
+        .NotEmpty()
+        .WithMessage("There should be at least one serial number!");
+
         RuleForEach(x => x.purchaseItems).SetValidator(new PurchaseItemValidator());
     }
+
+
 }

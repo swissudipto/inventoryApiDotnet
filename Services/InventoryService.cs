@@ -1,3 +1,4 @@
+using AutoMapper;
 using inventoryApiDotnet.Constants;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
@@ -15,6 +16,7 @@ namespace inventoryApiDotnet.Services
         public readonly IPurchaseItemRepository _purchaseItemRepository;
         public readonly ISellItemRepository _sellItemRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public InventoryService(IPurchaseRepository purchaseRepository,
                                 IStockservice Stockservice,
@@ -23,7 +25,8 @@ namespace inventoryApiDotnet.Services
                                 IStockRepository stockRepository,
                                 IPurchaseItemRepository purchaseItemRepository,
                                 ISellItemRepository sellItemRepository,
-                                IUnitOfWork unitOfWork)
+                                IUnitOfWork unitOfWork,
+                                IMapper mapper)
         {
             _purchaseRepository = purchaseRepository;
             _Stockservice = Stockservice;
@@ -33,6 +36,7 @@ namespace inventoryApiDotnet.Services
             _purchaseItemRepository = purchaseItemRepository;
             _sellItemRepository = sellItemRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Purchase>> getallpurchase()
@@ -41,12 +45,13 @@ namespace inventoryApiDotnet.Services
             return allPurchaseList.OrderByDescending(x => x.transactionDateTime).ToList();
         }
 
-        public async Task<PagedResult<Purchase>> getallpurchase(int page, int pageSize)
+        public async Task<PagedResult<PurchaseDto>> getallpurchase(int page, int pageSize)
         {
-            var allPurchaseList = await _purchaseRepository.GetAllbyPageWithItems(page, pageSize);
+            var allPurchaseListRaw = await _purchaseRepository.GetAllbyPageWithItems(page, pageSize);
+            var allPurchaseList = _mapper.Map<PurchaseDto[]>(allPurchaseListRaw);
             var totalRecords = await _purchaseRepository.GetCollectionCount();
 
-            return new PagedResult<Purchase>(allPurchaseList.ToList(), totalRecords, page, pageSize);
+            return new PagedResult<PurchaseDto>(allPurchaseList.ToList(), totalRecords, page, pageSize);
         }
 
         public async Task<IEnumerable<Sell>> getallsell()
