@@ -13,9 +13,11 @@ namespace inventoryApiDotnet.Model
     public string? SupplierAddress { get; set; }
     public string? Comment { get; set; }
     public DateTime? transactionDateTime { get; set; }
-    public ICollection<PurchaseItem>? purchaseItems { get; set; }
     public ICollection<string>? SerialNumbers { get; set; }
     public double? TotalAmount { get; set; }
+    public string? ProductName { get; set; }
+    public long ProductId { get; set; }
+    public long Quantity { get; set; }
+    public long Amount { get; set; }
   }
-  
 }

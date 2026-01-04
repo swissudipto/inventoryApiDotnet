@@ -71,19 +71,34 @@ namespace inventoryApiDotnet.Services
         {
             obj.transactionDateTime = DateTime.UtcNow;
             obj.PurchaseId = await _purchaseRepository.GetCollectionCount() + 1;
-            obj.purchaseItems.ToList().ForEach(x => { x.PurchaseId = obj.PurchaseId; });
+            // obj.purchaseItems.ToList().ForEach(x => { x.PurchaseId = obj.PurchaseId; });
             await _purchaseRepository.Add(obj);
-            await _Stockservice.AddNewStock(obj.purchaseItems.ToList());
+            await _Stockservice.AddNewStock(new List<PurchaseItem>() 
+                                            { new PurchaseItem
+                                                { Sl = 1, 
+                                                  Amount = obj.Amount, 
+                                                  Quantity = obj.Quantity, 
+                                                  ProductName = obj.ProductName, 
+                                                  ProductId = obj.ProductId}});
             await _unitOfWork.SaveAsync();
         }
 
         public async Task editPurchase(Purchase obj)
         {
-            var newPurchase = obj.purchaseItems;
+            var newPurchase = new List<PurchaseItem>(){new PurchaseItem{Sl = 1, 
+                                                                        ProductId = obj.ProductId, 
+                                                                        ProductName = obj.ProductName, 
+                                                                        Quantity = obj.Quantity,
+                                                                        PurchaseId = obj.PurchaseId}};
+
             var existingPurchase = await _purchaseRepository.GetByPuchaseId(obj.PurchaseId ?? 0);
             if (existingPurchase != null)
             {
-                await stockModificationOnPurchaseItemChange(existingPurchase.purchaseItems.ToList() ?? new List<PurchaseItem>(),
+                await stockModificationOnPurchaseItemChange(new List<PurchaseItem>(){new PurchaseItem{Sl = 1, 
+                                                                        ProductId = existingPurchase.ProductId, 
+                                                                        ProductName = existingPurchase.ProductName, 
+                                                                        Quantity = existingPurchase.Quantity,
+                                                                        PurchaseId = existingPurchase.PurchaseId}} ?? new List<PurchaseItem>(),
                                                             newPurchase.ToList() ?? new List<PurchaseItem>());
                 existingPurchase.Comment = obj.Comment;
                 existingPurchase.PurchaseDate = obj.PurchaseDate;
@@ -91,12 +106,16 @@ namespace inventoryApiDotnet.Services
                 existingPurchase.SupplierContactNumber = obj.SupplierContactNumber;
                 existingPurchase.SupplierName = obj.SupplierName;
                 existingPurchase.TotalAmount = obj.TotalAmount;
+                existingPurchase.ProductId = obj.ProductId;
+                existingPurchase.ProductName = obj.ProductName;
+                existingPurchase.Quantity = obj.Quantity;
+                existingPurchase.Amount = obj.Amount;
                 //await _purchaseRepository.Update(edititem);
 
-                existingPurchase.purchaseItems.Clear();
+                //existingPurchase.purchaseItems.Clear();
                 //obj.purchaseItems.ToList().ForEach(x =>x.PurchaseId =)
                 //existingPurchase.purchaseItems.ToList().ForEach(x => { x.PurchaseId = obj.PurchaseId; });
-                existingPurchase.purchaseItems = newPurchase;
+                //existingPurchase.purchaseItems = newPurchase;
 
                 await _unitOfWork.SaveAsync();
             }

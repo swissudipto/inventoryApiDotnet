@@ -23,7 +23,6 @@ namespace inventoryApiDotnet.Repository
             {
                 // order dynamically by transactionDateTime descending
                 var query = DbSet
-                            .Include(x => x.purchaseItems)
                             .Include(y => y.SerialNumbers)
                             .OrderByDescending(e => EF.Property<DateTime?>(e, prop.Name));
                 return await query.Skip(skip).Take(pageSize).ToListAsync();
@@ -35,8 +34,9 @@ namespace inventoryApiDotnet.Repository
 
         public async Task<Purchase> GetByPuchaseId(long purchaseId)
         {
-            return await _DbSet.Include(a => a.purchaseItems)
-                               .Where(x => x.PurchaseId == purchaseId).FirstOrDefaultAsync();
+            return await _DbSet
+                        .Include(a => a.SerialNumbers)
+                        .Where(x => x.PurchaseId == purchaseId).SingleOrDefaultAsync();
         }
     }
 }

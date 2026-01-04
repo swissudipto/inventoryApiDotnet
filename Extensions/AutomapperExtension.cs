@@ -17,7 +17,7 @@ public static class AutomapperExtension
                             {
                                 serial = s,
                                 PurchaseId = src.PurchaseId,
-                                ProductId = src.purchaseItems.ToList()[0].ProductId
+                                ProductId = src.ProductId
 
                             }).ToList()
                             : null
