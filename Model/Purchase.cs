@@ -21,6 +21,7 @@ namespace inventoryApiDotnet.Model
     public long ProductId { get; set; }
     public long Quantity { get; set; }
     public long Amount { get; set; }
+    public bool isActive { get; set; } = true;
   }
 
   public class PurchaseItem
@@ -42,6 +43,7 @@ namespace inventoryApiDotnet.Model
     public long? PurchaseId { get; set; }
     public long ProductId { get; set; }
     public string? serial { get; set; }
+    public bool isActive { get; set; } = true;
     [ForeignKey("PurchaseId")]
     public Purchase? Purchase { get; set; } = null!;
   }

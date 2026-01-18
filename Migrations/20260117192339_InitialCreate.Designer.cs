@@ -12,7 +12,7 @@ using inventoryApiDotnet.Repository;
 namespace inventoryApiDotnet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260102134019_InitialCreate")]
+    [Migration("20260117192339_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -98,6 +98,9 @@ namespace inventoryApiDotnet.Migrations
 
                     b.Property<double?>("TotalAmount")
                         .HasColumnType("double precision");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("transactionDateTime")
                         .HasColumnType("timestamp with time zone");
@@ -190,6 +193,9 @@ namespace inventoryApiDotnet.Migrations
 
                     b.Property<long?>("PurchaseId")
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("serial")
                         .HasColumnType("text");

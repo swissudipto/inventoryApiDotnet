@@ -55,7 +55,8 @@ namespace inventoryApiDotnet.Migrations
                     ProductName = table.Column<string>(type: "text", nullable: true),
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
                     Quantity = table.Column<long>(type: "bigint", nullable: false),
-                    Amount = table.Column<long>(type: "bigint", nullable: false)
+                    Amount = table.Column<long>(type: "bigint", nullable: false),
+                    isActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,7 +120,8 @@ namespace inventoryApiDotnet.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PurchaseId = table.Column<long>(type: "bigint", nullable: true),
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
-                    serial = table.Column<string>(type: "text", nullable: true)
+                    serial = table.Column<string>(type: "text", nullable: true),
+                    isActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {

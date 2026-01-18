@@ -96,6 +96,9 @@ namespace inventoryApiDotnet.Migrations
                     b.Property<double?>("TotalAmount")
                         .HasColumnType("double precision");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime?>("transactionDateTime")
                         .HasColumnType("timestamp with time zone");
 
@@ -187,6 +190,9 @@ namespace inventoryApiDotnet.Migrations
 
                     b.Property<long?>("PurchaseId")
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("serial")
                         .HasColumnType("text");
