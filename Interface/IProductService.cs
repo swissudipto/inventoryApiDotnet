@@ -8,5 +8,6 @@ namespace inventoryApiDotnet.Interface
         Task<IEnumerable<Product>> GetAllProducts();
         Task<Product> GetProductById(long productID);
         Task<bool> IsProductNameExists(string productName);
+        Task<SerialNoDto> GetProductBySerialNumber(string serialnumber);
     }
 }

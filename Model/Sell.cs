@@ -28,9 +28,13 @@ namespace inventoryApiDotnet.Model
     public string? InvoiceNo { get; set; }
     public long Sl { get; set; }
     public string? ProductName { get; set; }
+    public string? Serial {get;set;}
     public long ProductId { get; set; }
     public long Quantity { get; set; }
-    public long Amount { get; set; }
+    public decimal Amount { get; set; }
+    public long Gstpercentage { get; set; }
+    public decimal Gstamount { get; set; }
+    public decimal Taxableamount { get; set; }
     [ForeignKey("InvoiceNo")]
     public Sell? Sell { get; set; } = null!;
   }

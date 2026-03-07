@@ -12,7 +12,7 @@ using inventoryApiDotnet.Repository;
 namespace inventoryApiDotnet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260117192339_InitialCreate")]
+    [Migration("20260120134238_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

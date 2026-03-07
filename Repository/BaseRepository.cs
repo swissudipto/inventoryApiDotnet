@@ -47,20 +47,9 @@ namespace inventoryApiDotnet.Repository
         }
 
         // ---------------------- Remove ----------------------
-        public virtual void Remove(Guid id)
+        public virtual async Task Remove(TEntity obj)
         {
-            var entity = DbSet.Local.FirstOrDefault(e => EF.Property<Guid>(e, "Id") == id);
-            if (entity == null)
-            {
-                entity = Activator.CreateInstance<TEntity>();
-                var property = typeof(TEntity).GetProperty("Id");
-                property?.SetValue(entity, id);
-                Context.Entry(entity).State = EntityState.Deleted;
-            }
-            else
-            {
-                DbSet.Remove(entity);
-            }
+           DbSet.Remove(obj);
         }
 
         // ---------------------- QueryCollectionAsync ----------------------

@@ -15,9 +15,11 @@ public static class AutomapperExtension
                         src.SerialNumbers != null
                             ? src.SerialNumbers.Select(s => new SerialNumbers
                             {
-                                serial = s,
+                                serial = s.Key,
+                                isActive = s.Value,
                                 PurchaseId = src.PurchaseId,
-                                ProductId = src.ProductId
+                                ProductId = src.ProductId,
+                                buyingprice = src.Amount
 
                             }).ToList()
                             : null
@@ -29,7 +31,7 @@ public static class AutomapperExtension
                dest => dest.SerialNumbers,
                opt => opt.MapFrom(src =>
                    src.SerialNumbers != null
-                       ? src.SerialNumbers.Select(s => s.serial).ToList()
+                       ? src.SerialNumbers.ToDictionary(s => s.serial, s => s.isActive)
                        : null
                )
            );

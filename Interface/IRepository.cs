@@ -7,7 +7,7 @@
         Task<TEntity> GetById(long id);
         Task<IEnumerable<TEntity>> GetAll();
         Task Update(TEntity obj);
-        void Remove(Guid id);
+        Task Remove(TEntity obj);
         Task<long> GetCollectionCount();
         Task<List<TEntity>> QueryCollectionAsync(TEntity obj,Dictionary<string, object> filterParameters);
         Task<IEnumerable<TEntity>> GetAllbyPage(int page, int pageSize);      

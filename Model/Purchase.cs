@@ -20,7 +20,7 @@ namespace inventoryApiDotnet.Model
     public string? ProductName { get; set; }
     public long ProductId { get; set; }
     public long Quantity { get; set; }
-    public long Amount { get; set; }
+    public decimal Amount { get; set; }
     public bool isActive { get; set; } = true;
   }
 
@@ -32,7 +32,7 @@ namespace inventoryApiDotnet.Model
     public string? ProductName { get; set; }
     public long ProductId { get; set; }
     public long Quantity { get; set; }
-    public long Amount { get; set; }
+    public decimal Amount { get; set; }
   }
 
   public class SerialNumbers
@@ -44,6 +44,8 @@ namespace inventoryApiDotnet.Model
     public long ProductId { get; set; }
     public string? serial { get; set; }
     public bool isActive { get; set; } = true;
+    public decimal buyingprice { get; set; }
+
     [ForeignKey("PurchaseId")]
     public Purchase? Purchase { get; set; } = null!;
   }
