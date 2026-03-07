@@ -2,7 +2,7 @@
 using FluentValidation;
 using inventoryApiDotnet.Model;
 
-internal sealed class PurchaseValidator : AbstractValidator<Purchase>
+internal sealed class PurchaseValidator : AbstractValidator<PurchaseDto>
 {
     public PurchaseValidator()
     {
@@ -26,10 +26,46 @@ internal sealed class PurchaseValidator : AbstractValidator<Purchase>
         .GreaterThan(0)
         .WithMessage("Total Amount Should be greater than 0");
 
-        RuleFor(x => x.purchaseItems)
+        RuleFor(x => x.Amount)
         .NotEmpty()
-        .WithMessage("The Purchase Items must Contain atleast 1 item");
+        .WithMessage("Amount Cannot be Empty")
+        .NotNull()
+        .WithMessage("Amount Cannot be Null")
+        .GreaterThan(0)
+        .WithMessage("Amount Should be greater than 0");
 
-        RuleForEach(x => x.purchaseItems).SetValidator(new PurchaseItemValidator());
+        RuleFor(x => x.Quantity)
+        .NotEmpty()
+        .WithMessage("Quantity Cannot be Empty")
+        .NotNull()
+        .WithMessage("Quantity Cannot be Null")
+        .GreaterThan(0)
+        .WithMessage("Quantity Should be greater than 0");
+
+        RuleFor(x => x.ProductName)
+        .NotEmpty()
+        .WithMessage("Product Name Cannot be Empty")
+        .NotNull()
+        .WithMessage("Product Name Cannot be Null");
+
+        RuleFor(x => x.ProductId)
+        .NotEmpty()
+        .WithMessage("Product Id Cannot be Empty")
+        .NotNull()
+        .WithMessage("Product Id Cannot be Null")
+        .GreaterThan(0)
+        .WithMessage("Product Id Should be greater than 0");
+
+        // RuleFor(x => x.purchaseItems)
+        // .NotEmpty()
+        // .WithMessage("The Purchase Items must Contain atleast 1 item");
+
+        RuleFor(x => x.SerialNumbers)
+        .NotEmpty()
+        .WithMessage("There should be at least one serial number!");
+
+        //RuleForEach(x => x.purchaseItems).SetValidator(new PurchaseItemValidator());
     }
+
+
 }

@@ -1,3 +1,4 @@
+using AutoMapper;
 using inventoryApiDotnet.Constants;
 using inventoryApiDotnet.Interface;
 using inventoryApiDotnet.Model;
@@ -14,7 +15,9 @@ namespace inventoryApiDotnet.Services
         public readonly IStockRepository _stockRepository;
         public readonly IPurchaseItemRepository _purchaseItemRepository;
         public readonly ISellItemRepository _sellItemRepository;
+        public readonly ISerialNumbersRepository _serialNumbersRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public InventoryService(IPurchaseRepository purchaseRepository,
                                 IStockservice Stockservice,
@@ -23,7 +26,9 @@ namespace inventoryApiDotnet.Services
                                 IStockRepository stockRepository,
                                 IPurchaseItemRepository purchaseItemRepository,
                                 ISellItemRepository sellItemRepository,
-                                IUnitOfWork unitOfWork)
+                                ISerialNumbersRepository serialNumbersRepository,
+                                IUnitOfWork unitOfWork,
+                                IMapper mapper)
         {
             _purchaseRepository = purchaseRepository;
             _Stockservice = Stockservice;
@@ -32,7 +37,9 @@ namespace inventoryApiDotnet.Services
             _stockRepository = stockRepository;
             _purchaseItemRepository = purchaseItemRepository;
             _sellItemRepository = sellItemRepository;
+            _serialNumbersRepository = serialNumbersRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Purchase>> getallpurchase()
@@ -41,12 +48,13 @@ namespace inventoryApiDotnet.Services
             return allPurchaseList.OrderByDescending(x => x.transactionDateTime).ToList();
         }
 
-        public async Task<PagedResult<Purchase>> getallpurchase(int page, int pageSize)
+        public async Task<PagedResult<PurchaseDto>> getallpurchase(int page, int pageSize)
         {
-            var allPurchaseList = await _purchaseRepository.GetAllbyPageWithItems(page, pageSize);
+            var allPurchaseListRaw = await _purchaseRepository.GetAllbyPageWithItems(page, pageSize);
+            var allPurchaseList = _mapper.Map<PurchaseDto[]>(allPurchaseListRaw);
             var totalRecords = await _purchaseRepository.GetCollectionCount();
 
-            return new PagedResult<Purchase>(allPurchaseList.ToList(), totalRecords, page, pageSize);
+            return new PagedResult<PurchaseDto>(allPurchaseList.ToList(), totalRecords, page, pageSize);
         }
 
         public async Task<IEnumerable<Sell>> getallsell()
@@ -66,19 +74,34 @@ namespace inventoryApiDotnet.Services
         {
             obj.transactionDateTime = DateTime.UtcNow;
             obj.PurchaseId = await _purchaseRepository.GetCollectionCount() + 1;
-            obj.purchaseItems.ToList().ForEach(x => { x.PurchaseId = obj.PurchaseId; });
+            // obj.purchaseItems.ToList().ForEach(x => { x.PurchaseId = obj.PurchaseId; });
             await _purchaseRepository.Add(obj);
-            await _Stockservice.AddNewStock(obj.purchaseItems.ToList());
+            await _Stockservice.AddNewStock(new List<PurchaseItem>()
+                                            { new PurchaseItem
+                                                { Sl = 1,
+                                                  Amount = obj.Amount,
+                                                  Quantity = obj.Quantity,
+                                                  ProductName = obj.ProductName,
+                                                  ProductId = obj.ProductId}});
             await _unitOfWork.SaveAsync();
         }
 
         public async Task editPurchase(Purchase obj)
         {
-            var newPurchase = obj.purchaseItems;
+            var newPurchase = new List<PurchaseItem>(){new PurchaseItem{Sl = 1,
+                                                                        ProductId = obj.ProductId,
+                                                                        ProductName = obj.ProductName,
+                                                                        Quantity = obj.Quantity,
+                                                                        PurchaseId = obj.PurchaseId}};
+
             var existingPurchase = await _purchaseRepository.GetByPuchaseId(obj.PurchaseId ?? 0);
             if (existingPurchase != null)
             {
-                await stockModificationOnPurchaseItemChange(existingPurchase.purchaseItems.ToList() ?? new List<PurchaseItem>(),
+                await stockModificationOnPurchaseItemChange(new List<PurchaseItem>(){new PurchaseItem{Sl = 1,
+                                                                        ProductId = existingPurchase.ProductId,
+                                                                        ProductName = existingPurchase.ProductName,
+                                                                        Quantity = existingPurchase.Quantity,
+                                                                        PurchaseId = existingPurchase.PurchaseId}} ?? new List<PurchaseItem>(),
                                                             newPurchase.ToList() ?? new List<PurchaseItem>());
                 existingPurchase.Comment = obj.Comment;
                 existingPurchase.PurchaseDate = obj.PurchaseDate;
@@ -86,13 +109,28 @@ namespace inventoryApiDotnet.Services
                 existingPurchase.SupplierContactNumber = obj.SupplierContactNumber;
                 existingPurchase.SupplierName = obj.SupplierName;
                 existingPurchase.TotalAmount = obj.TotalAmount;
-                //await _purchaseRepository.Update(edititem);
+                existingPurchase.ProductId = obj.ProductId;
+                existingPurchase.ProductName = obj.ProductName;
+                existingPurchase.Quantity = obj.Quantity;
+                existingPurchase.Amount = obj.Amount;
 
-                existingPurchase.purchaseItems.Clear();
-                //obj.purchaseItems.ToList().ForEach(x =>x.PurchaseId =)
-                //existingPurchase.purchaseItems.ToList().ForEach(x => { x.PurchaseId = obj.PurchaseId; });
-                existingPurchase.purchaseItems = newPurchase;
+                foreach (var serial in obj.SerialNumbers)
+                {
+                    var existingSerial = existingPurchase.SerialNumbers
+                        .FirstOrDefault(x => x.serial == serial.serial);
 
+                    if (existingSerial != null)
+                    {
+                        if(serial.isActive)
+                        {
+                            await _serialNumbersRepository.Remove(existingSerial);
+                        }
+                    }
+                    else
+                    {
+                        existingPurchase.SerialNumbers.Add(serial);
+                    }
+                }
                 await _unitOfWork.SaveAsync();
             }
         }
@@ -111,6 +149,14 @@ namespace inventoryApiDotnet.Services
                     return message;
                 }
                 await _Stockservice.afterSellStockModification(item);
+
+                // For serial Number
+                var existingSerial = await _serialNumbersRepository.GetBySerialNumber(item.Serial ?? "");
+                if (existingSerial != null)
+                {
+                    existingSerial.isActive = false;
+                    await _serialNumbersRepository.Update(existingSerial);
+                }
             }
 
             sell.InvoiceNo = await _invoiceCounterService.GenerateInvoiceNumber();

@@ -51,7 +51,12 @@ namespace inventoryApiDotnet.Migrations
                     SupplierAddress = table.Column<string>(type: "text", nullable: true),
                     Comment = table.Column<string>(type: "text", nullable: true),
                     transactionDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    TotalAmount = table.Column<double>(type: "double precision", nullable: true)
+                    TotalAmount = table.Column<double>(type: "double precision", nullable: true),
+                    ProductName = table.Column<string>(type: "text", nullable: true),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false),
+                    Quantity = table.Column<long>(type: "bigint", nullable: false),
+                    Amount = table.Column<long>(type: "bigint", nullable: false),
+                    isActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -108,23 +113,21 @@ namespace inventoryApiDotnet.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PurchaseItem",
+                name: "SerialNumbers",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PurchaseId = table.Column<long>(type: "bigint", nullable: true),
-                    Sl = table.Column<long>(type: "bigint", nullable: false),
-                    ProductName = table.Column<string>(type: "text", nullable: true),
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
-                    Quantity = table.Column<long>(type: "bigint", nullable: false),
-                    Amount = table.Column<long>(type: "bigint", nullable: false)
+                    serial = table.Column<string>(type: "text", nullable: true),
+                    isActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PurchaseItem", x => x.Id);
+                    table.PrimaryKey("PK_SerialNumbers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PurchaseItem_Purchase_PurchaseId",
+                        name: "FK_SerialNumbers_Purchase_PurchaseId",
                         column: x => x.PurchaseId,
                         principalTable: "Purchase",
                         principalColumn: "PurchaseId",
@@ -156,14 +159,20 @@ namespace inventoryApiDotnet.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PurchaseItem_PurchaseId",
-                table: "PurchaseItem",
-                column: "PurchaseId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SellItem_InvoiceNo",
                 table: "SellItem",
                 column: "InvoiceNo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SerialNumbers_PurchaseId",
+                table: "SerialNumbers",
+                column: "PurchaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SerialNumbers_serial",
+                table: "SerialNumbers",
+                column: "serial",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -176,10 +185,10 @@ namespace inventoryApiDotnet.Migrations
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "PurchaseItem");
+                name: "SellItem");
 
             migrationBuilder.DropTable(
-                name: "SellItem");
+                name: "SerialNumbers");
 
             migrationBuilder.DropTable(
                 name: "Stock");
@@ -188,10 +197,10 @@ namespace inventoryApiDotnet.Migrations
                 name: "User");
 
             migrationBuilder.DropTable(
-                name: "Purchase");
+                name: "Sell");
 
             migrationBuilder.DropTable(
-                name: "Sell");
+                name: "Purchase");
         }
     }
 }

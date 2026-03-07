@@ -12,7 +12,7 @@ using inventoryApiDotnet.Repository;
 namespace inventoryApiDotnet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251109175547_InitialCreate")]
+    [Migration("20260120134238_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -63,6 +63,9 @@ namespace inventoryApiDotnet.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("PurchaseId"));
 
+                    b.Property<long>("Amount")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Comment")
                         .HasColumnType("text");
 
@@ -72,8 +75,17 @@ namespace inventoryApiDotnet.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long?>("Id"));
 
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("PurchaseDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("Quantity")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("SupplierAddress")
                         .HasColumnType("text");
@@ -87,45 +99,15 @@ namespace inventoryApiDotnet.Migrations
                     b.Property<double?>("TotalAmount")
                         .HasColumnType("double precision");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime?>("transactionDateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("PurchaseId");
 
                     b.ToTable("Purchase");
-                });
-
-            modelBuilder.Entity("inventoryApiDotnet.Model.PurchaseItem", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("Amount")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ProductId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ProductName")
-                        .HasColumnType("text");
-
-                    b.Property<long?>("PurchaseId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("Quantity")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("Sl")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PurchaseId");
-
-                    b.ToTable("PurchaseItem");
                 });
 
             modelBuilder.Entity("inventoryApiDotnet.Model.Sell", b =>
@@ -198,6 +180,36 @@ namespace inventoryApiDotnet.Migrations
                     b.ToTable("SellItem");
                 });
 
+            modelBuilder.Entity("inventoryApiDotnet.Model.SerialNumbers", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("PurchaseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("serial")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PurchaseId");
+
+                    b.HasIndex("serial")
+                        .IsUnique();
+
+                    b.ToTable("SerialNumbers");
+                });
+
             modelBuilder.Entity("inventoryApiDotnet.Model.Stock", b =>
                 {
                     b.Property<string>("Id")
@@ -242,16 +254,6 @@ namespace inventoryApiDotnet.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("inventoryApiDotnet.Model.PurchaseItem", b =>
-                {
-                    b.HasOne("inventoryApiDotnet.Model.Purchase", "Purchase")
-                        .WithMany("purchaseItems")
-                        .HasForeignKey("PurchaseId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Purchase");
-                });
-
             modelBuilder.Entity("inventoryApiDotnet.Model.SellItem", b =>
                 {
                     b.HasOne("inventoryApiDotnet.Model.Sell", "Sell")
@@ -262,9 +264,19 @@ namespace inventoryApiDotnet.Migrations
                     b.Navigation("Sell");
                 });
 
+            modelBuilder.Entity("inventoryApiDotnet.Model.SerialNumbers", b =>
+                {
+                    b.HasOne("inventoryApiDotnet.Model.Purchase", "Purchase")
+                        .WithMany("SerialNumbers")
+                        .HasForeignKey("PurchaseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Purchase");
+                });
+
             modelBuilder.Entity("inventoryApiDotnet.Model.Purchase", b =>
                 {
-                    b.Navigation("purchaseItems");
+                    b.Navigation("SerialNumbers");
                 });
 
             modelBuilder.Entity("inventoryApiDotnet.Model.Sell", b =>

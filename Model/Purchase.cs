@@ -15,21 +15,37 @@ namespace inventoryApiDotnet.Model
     public string? SupplierAddress { get; set; }
     public string? Comment { get; set; }
     public DateTime? transactionDateTime { get; set; }
-    public ICollection<PurchaseItem>? purchaseItems { get; set; }
+    public ICollection<SerialNumbers>? SerialNumbers { get; set; }
     public double? TotalAmount { get; set; }
+    public string? ProductName { get; set; }
+    public long ProductId { get; set; }
+    public long Quantity { get; set; }
+    public decimal Amount { get; set; }
+    public bool isActive { get; set; } = true;
   }
 
   public class PurchaseItem
   {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long? Id { get; set; }
     public long? PurchaseId { get; set; }
     public long Sl { get; set; }
     public string? ProductName { get; set; }
     public long ProductId { get; set; }
     public long Quantity { get; set; }
-    public long Amount { get; set; }
+    public decimal Amount { get; set; }
+  }
+
+  public class SerialNumbers
+  {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public long? Id { get; set; }
+    public long? PurchaseId { get; set; }
+    public long ProductId { get; set; }
+    public string? serial { get; set; }
+    public bool isActive { get; set; } = true;
+    public decimal buyingprice { get; set; }
+
     [ForeignKey("PurchaseId")]
     public Purchase? Purchase { get; set; } = null!;
   }

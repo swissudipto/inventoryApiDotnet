@@ -23,7 +23,7 @@ namespace inventoryApiDotnet.Repository
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Purchase>()
-                .HasMany(p => p.purchaseItems)
+                .HasMany(p => p.SerialNumbers)
                 .WithOne(pi => pi.Purchase)
                 .HasForeignKey(pi => pi.PurchaseId)               
                 .OnDelete(DeleteBehavior.Cascade); // when Purchase deleted, delete items too
@@ -33,6 +33,10 @@ namespace inventoryApiDotnet.Repository
                 .WithOne(pi => pi.Sell)
                 .HasForeignKey(pi => pi.InvoiceNo)
                 .OnDelete(DeleteBehavior.Cascade); // when Purchase deleted, delete items too
+
+            modelBuilder.Entity<SerialNumbers>()
+                .HasIndex(s => s.serial)
+                .IsUnique();
         }
     }
 }

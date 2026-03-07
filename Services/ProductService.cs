@@ -7,12 +7,16 @@ namespace inventoryApiDotnet.Services
   public class ProductService : IProductService
   {
     private readonly IProductRepository _productRepository;
+    private readonly ISerialNumbersRepository _serialNumberRepo;
     private readonly IUnitOfWork _unitOfWork;
 
-    public ProductService(IProductRepository productRepository, IUnitOfWork unitOfWork)
+    public ProductService(IProductRepository productRepository, 
+                          IUnitOfWork unitOfWork,
+                          ISerialNumbersRepository serialNumberRepo)
     {
       _productRepository = productRepository;
       _unitOfWork = unitOfWork;
+      _serialNumberRepo = serialNumberRepo;
     }
 
     public async Task<IEnumerable<Product>> GetAllProducts()
@@ -48,6 +52,20 @@ namespace inventoryApiDotnet.Services
               };
       var response = await _productRepository.QueryCollectionAsync(new Product(), filterParameters);
       return response.Count() == 0 ? false : true;
+    }
+
+    public async Task<SerialNoDto> GetProductBySerialNumber(string serialnumber)
+    {
+        var serialNumberDetails = await _serialNumberRepo.GetBySerialNumber(serialnumber);
+        var productDetails = await GetProductById(serialNumberDetails.ProductId);
+        var result = new SerialNoDto()
+        {
+          ProductId = productDetails.ProductId ?? 0,
+          ProductName = productDetails.ProductName,
+          serial = serialNumberDetails.serial,
+          SuggestedSellingPrice = Math.Ceiling(serialNumberDetails.buyingprice + ((serialNumberDetails.buyingprice*10)/100))
+        };
+        return result;
     }
   }
 }

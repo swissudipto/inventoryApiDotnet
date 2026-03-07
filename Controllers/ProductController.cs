@@ -49,6 +49,17 @@ namespace inventoryApiDotnet.Controllers
             }
             var result = await _productService.SaveProduct(obj);
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Gets Product Details by Serial number
+        /// </summary>
+        /// <param name="serialNumber"></param>
+        /// <returns></returns>
+        [HttpGet("getbyserialnumber")]
+        public async Task<ActionResult<SerialNoDto>> GetProductBySerialNumber(string serialNumber)
+        {
+            return await _productService.GetProductBySerialNumber(serialNumber);
         }   
     }
 }
