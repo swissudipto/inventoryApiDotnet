@@ -22,10 +22,10 @@ namespace inventoryApiDotnet.Repository
             if (prop != null)
             {
                 // order dynamically by transactionDateTime descending
-                var query = DbSet
-                            .Include(y => y.SerialNumbers
-                                .Where(s => s.isActive))
-                            .OrderByDescending(e => EF.Property<DateTime?>(e, prop.Name));
+                  var query = DbSet
+                            .Include(y => y.SerialNumbers)
+                            .OrderByDescending(e => EF.Property<DateTime?>(e, prop.Name))
+                            .Where(x => x.isActive);
                 return await query.Skip(skip).Take(pageSize).ToListAsync();
             }
 
