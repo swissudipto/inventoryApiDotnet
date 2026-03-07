@@ -16,7 +16,7 @@ namespace inventoryApiDotnet.Repository
 
         public async Task<SerialNumbers> GetBySerialNumber(string serialnumber)
         {
-            return _DbSet.FirstOrDefault(x => x.serial == serialnumber);
+            return _DbSet.FirstOrDefault(x => x.serial == serialnumber && x.isActive);
         }
     }
 }
