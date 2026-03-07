@@ -25,8 +25,7 @@ namespace inventoryApiDotnet.Repository
                 var query = DbSet
                             .Include(y => y.SerialNumbers
                                 .Where(s => s.isActive))
-                            .OrderByDescending(e => EF.Property<DateTime?>(e, prop.Name))
-                            .Where(x => x.isActive);
+                            .OrderByDescending(e => EF.Property<DateTime?>(e, prop.Name));
                 return await query.Skip(skip).Take(pageSize).ToListAsync();
             }
 
